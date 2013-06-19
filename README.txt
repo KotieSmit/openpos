@@ -1,3 +1,6 @@
+
+
+
 How to Install
 -------------------------
 1. Create/locate a new mysql database to install open source point of sale into

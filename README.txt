@@ -1,5 +1,7 @@
 
-
+Changes from orginal:
+ - Changed tax calcultion from GST to VAT (for use for South Africa)
+ - Start adding a second sales screen, to be used for touch screen driven sales (Still work-in-progress)
 
 How to Install
 -------------------------

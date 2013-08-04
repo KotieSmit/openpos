@@ -31,4 +31,6 @@ $lang['module_giftcards_desc']='Add, Update, Delete and Search gift cards';
 $lang['module_item_kits']='Item Kits';
 $lang['module_item_kits_desc']='Add, Update, Delete and Search Item Kits';
 
+$lang['module_touch_sales']='Touch Sales';
+$lang['module_touch_sales_desc']='Touch screen based sales';
 ?>

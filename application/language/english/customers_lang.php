@@ -1,5 +1,5 @@
 <?php
-$lang['customers_new']='New Customer';
+$lang['customers_new']='New customer';
 $lang['customers_customer']='Customer';
 $lang['customers_update']='Update Customer';
 $lang['customers_confirm_delete']='Are you sure you want to delete the selected customers?';

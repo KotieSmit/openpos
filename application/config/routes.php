@@ -37,11 +37,11 @@
 | in the URL cannot be matched to a valid route.
 |
 */
-$route['news/create'] = 'news/create';
-$route['news/(:any)'] = 'news/view/$1';
-$route['news'] = 'news';
-$route['(:any)'] = 'pages/view/$1';
-$route['default_controller'] = 'pages/view';
+//$route['news/create'] = 'news/create';
+//$route['news/(:any)'] = 'news/view/$1';
+//$route['news'] = 'news';
+//$route['(:any)'] = 'pages/view/$1';
+//$route['default_controller'] = 'pages/view';
 
 
 $route['default_controller'] = "login";
@@ -60,7 +60,6 @@ $route['reports/detailed_receivings'] = "reports/date_input";
 $route['reports/(specific_:any)/(:any)/(:any)/(:any)'] = "reports/$1/$2/$3/$4";
 $route['reports/specific_customer'] = "reports/specific_customer_input";
 $route['reports/specific_employee'] = "reports/specific_employee_input";
-
 $route['scaffolding_trigger'] = "";
 
 $route['404_override'] = 'errors/page_missing';

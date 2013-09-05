@@ -425,8 +425,8 @@ if ( ! function_exists('form_submit'))
 	function form_submit($data = '', $value = '', $extra = '')
 	{
 		$defaults = array('type' => 'submit', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
-
-		return "<input "._parse_form_attributes($data, $defaults).$extra." />";
+        $result = "<input "._parse_form_attributes($data, $defaults).$extra." />";
+		return $result;
 	}
 }
 
@@ -901,7 +901,7 @@ if ( ! function_exists('_parse_form_attributes'))
 {
 	function _parse_form_attributes($attributes, $default)
 	{
-		if (is_array($attributes))
+ 		if (is_array($attributes))
 		{
 			foreach ($default as $key => $val)
 			{

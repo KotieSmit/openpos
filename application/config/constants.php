@@ -37,5 +37,8 @@ define('FOPEN_WRITE_CREATE_STRICT', 			'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 
+/* Use VAT tax system?  False = GST tax system */
+define('USE_VAT', true);
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

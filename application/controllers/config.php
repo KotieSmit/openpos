@@ -30,7 +30,8 @@ class Config extends Secure_area
 		'return_policy'=>$this->input->post('return_policy'),
 		'language'=>$this->input->post('language'),
 		'timezone'=>$this->input->post('timezone'),
-		'print_after_sale'=>$this->input->post('print_after_sale')	
+		'print_after_sale'=>$this->input->post('print_after_sale'),
+        'config_use_vat'=>$this->input->post('config_use_vat')
 		);
 		
 		if($_SERVER['HTTP_HOST'] !='ospos.pappastech.com' && $this->Appconfig->batch_save($batch_save_data))

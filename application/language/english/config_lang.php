@@ -9,6 +9,7 @@ $lang['config_default_tax_rate']='Default Tax Rate %';
 $lang['config_default_tax_rate_1']='Tax 1 Rate';
 $lang['config_default_tax_rate_2']='Tax 2 Rate';
 $lang['config_use_tax_rate_2']='Use Tax rate 2?';
+$lang['config_use_vat'] = 'Use VAT tax system?';
 $lang['config_company_required']='Company name is a required field';
 $lang['config_address_required']='Company address is a required field';
 $lang['config_phone_required']='Company phone is a required field';

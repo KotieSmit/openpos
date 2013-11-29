@@ -13,8 +13,14 @@ class Summary_sales extends Report
 	}
 	
 	public function getData(array $inputs)
-	{		
-		$this->db->select('sale_date, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit');
+	{
+        if (USE_VAT){
+            $this->db->select('sale_date, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit');
+        }else{
+            $this->db->select('sale_date, sum(subtotal) as subtotal, sum(total) as total, sum(tax) as tax,sum(profit) as profit');
+        }
+
+
 		$this->db->from('sales_items_temp');
 		if ($inputs['sale_type'] == 'sales')
 		{

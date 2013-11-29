@@ -66,6 +66,15 @@ class Sale_lib
 		$this->CI->session->unset_userdata('email_receipt');
 	}
 
+    function set_use_vat($tax_mode){
+        $this->CI->session->set_userdata('tax_mode', $tax_mode);
+    }
+
+    function get_use_vat(){
+//        return true;
+        return $this->CI->session->userdata('tax_mode');
+    }
+
 	function add_payment($payment_id,$payment_amount)
 	{
 		$payments=$this->get_payments();
@@ -455,9 +464,13 @@ class Sale_lib
 			foreach($tax_info as $tax)
 			{
 				$name = $tax['percent'].'% ' . $tax['name'];
-				$tax_amount=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
-
-
+//                $this->set_tax_mode(true);
+                if ($this->get_use_vat()) {
+                    $line_total = ($item['price'] * $item['quantity']) - (($item['price'] * $item['quantity']) * ($item['discount']/100));
+				    $tax_amount=($line_total -($line_total / (1 + ($tax['percent']/100))));
+                }else{
+                    $tax_amount=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+                }
 				if (!isset($taxes[$name]))
 				{
 					$taxes[$name] = 0;
@@ -469,12 +482,29 @@ class Sale_lib
 		return $taxes;
 	}
 
+    function get_vat_amount()
+    {
+        foreach($this->get_cart() as $line=>$item)
+        {
+            $tax_info = $this->CI->Item_taxes->get_info($item['item_id']);
+            foreach($tax_info as $tax)
+            {
+                $line_total = ($item['price'] * $item['quantity']) - (($item['price'] * $item['quantity']) * ($item['discount']/100));
+                $tax_amount=($line_total -($line_total / (1 + ($tax['percent']/100))));
+            }
+        }
+        return $tax_amount;
+    }
+
 	function get_subtotal()
 	{
 		$subtotal = 0;
 		foreach($this->get_cart() as $item)
 		{
-		    $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+            $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+            if (USE_VAT) {
+		        $subtotal-=$this->get_vat_amount();
+            }
 		}
 		return to_currency_no_money($subtotal);
 	}
@@ -489,8 +519,8 @@ class Sale_lib
 
 		foreach($this->get_taxes() as $tax)
 		{
-			$total+=$tax;
-		}
+            if (!USE_VAT) {$total+=$tax;}
+    	}
 
 		return to_currency_no_money($total);
 	}

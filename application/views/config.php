@@ -5,6 +5,10 @@ echo form_open('config/save/', array('id' => 'config_form'));
 ?>
 <div id="config_wrapper">
 <fieldset id="config_info">
+<table>
+<tr>
+<td>
+
 <div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div>
 <ul id="error_message_box"></ul>
 <legend><?php echo $this->lang->line("config_info"); ?></legend>
@@ -41,50 +45,7 @@ echo form_open('config/save/', array('id' => 'config_form'));
     </div>
 </div>
 
-<div class="field_row clearfix">
-    <?php echo form_label($this->lang->line('config_default_tax_rate_1') . ':', 'default_tax_1_rate', array('class' => 'wide required')); ?>
-    <div class='form_field'>
-        <?php echo form_input(array(
-            'name' => 'default_tax_1_name',
-            'id' => 'default_tax_1_name',
-            'size' => '10',
-            'value' => $this->config->item('default_tax_1_name') !== FALSE ? $this->config->item('default_tax_1_name') : $this->lang->line('items_sales_tax_1')));?>
 
-        <?php echo form_input(array(
-            'name' => 'default_tax_1_rate',
-            'id' => 'default_tax_1_rate',
-            'size' => '4',
-            'value' => $this->config->item('default_tax_1_rate')));?>%
-    </div>
-</div>
-
-<div class="field_row clearfix">
-    <?php echo form_label($this->lang->line('config_use_tax_rate_2'), 'config_use_tax_rate_2', array('class' => 'wide')); ?>
-    <div class='form_field'>
-        <?php echo form_checkbox(array(
-            'name' => 'config_use_tax_rate_2',
-            'id' => 'config_use_tax_rate_2',
-            'value' => 'config_use_tax_rate_2',
-            'checked' => $this->config->item('config_use_tax_rate_2')));?>
-    </div>
-</div>
-
-<div class="field_row clearfix">
-    <?php echo form_label($this->lang->line('config_default_tax_rate_2') . ':', 'default_tax_1_rate', array('class' => 'wide')); ?>
-    <div class='form_field'>
-        <?php echo form_input(array(
-            'name' => 'default_tax_2_name',
-            'id' => 'default_tax_2_name',
-            'size' => '10',
-            'value' => $this->config->item('default_tax_2_name') !== FALSE ? $this->config->item('default_tax_2_name') : $this->lang->line('items_sales_tax_2')));?>
-
-        <?php echo form_input(array(
-            'name' => 'default_tax_2_rate',
-            'id' => 'default_tax_2_rate',
-            'size' => '4',
-            'value' => $this->config->item('default_tax_2_rate')));?>%
-    </div>
-</div>
 
 <div class="field_row clearfix">
     <?php echo form_label($this->lang->line('config_currency_symbol') . ':', 'currency_symbol', array('class' => 'wide')); ?>
@@ -270,6 +231,67 @@ echo form_submit(array(
         'class' => 'submit_button float_right')
 );
 ?>
+
+</td>
+<td>
+    <div class="field_row clearfix">
+        <?php echo form_label($this->lang->line('config_use_vat'), 'config_use_vat', array('class' => 'wide')); ?>
+        <div class='form_field'>
+            <?php echo form_checkbox(array(
+                'name' => 'config_use_vat',
+                'id' => 'config_use_vat',
+                'value' => 'config_use_vat',
+                'checked' => $this->config->item('config_use_vat')));?>
+        </div>
+    </div>
+
+    <div class="field_row clearfix">
+        <?php echo form_label($this->lang->line('config_default_tax_rate_1') . ':', 'default_tax_1_rate', array('class' => 'wide required')); ?>
+        <div class='form_field'>
+            <?php echo form_input(array(
+                'name' => 'default_tax_1_name',
+                'id' => 'default_tax_1_name',
+                'size' => '10',
+                'value' => $this->config->item('default_tax_1_name') !== FALSE ? $this->config->item('default_tax_1_name') : $this->lang->line('items_sales_tax_1')));?>
+
+            <?php echo form_input(array(
+                'name' => 'default_tax_1_rate',
+                'id' => 'default_tax_1_rate',
+                'size' => '4',
+                'value' => $this->config->item('default_tax_1_rate')));?>%
+        </div>
+    </div>
+
+    <div class="field_row clearfix">
+        <?php echo form_label($this->lang->line('config_use_tax_rate_2'), 'config_use_tax_rate_2', array('class' => 'wide')); ?>
+        <div class='form_field'>
+            <?php echo form_checkbox(array(
+                'name' => 'config_use_tax_rate_2',
+                'id' => 'config_use_tax_rate_2',
+                'value' => 'config_use_tax_rate_2',
+                'checked' => $this->config->item('config_use_tax_rate_2')));?>
+        </div>
+    </div>
+
+    <div class="field_row clearfix">
+        <?php echo form_label($this->lang->line('config_default_tax_rate_2') . ':', 'default_tax_1_rate', array('class' => 'wide')); ?>
+        <div class='form_field'>
+            <?php echo form_input(array(
+                'name' => 'default_tax_2_name',
+                'id' => 'default_tax_2_name',
+                'size' => '10',
+                'value' => $this->config->item('default_tax_2_name') !== FALSE ? $this->config->item('default_tax_2_name') : $this->lang->line('items_sales_tax_2')));?>
+
+            <?php echo form_input(array(
+                'name' => 'default_tax_2_rate',
+                'id' => 'default_tax_2_rate',
+                'size' => '4',
+                'value' => $this->config->item('default_tax_2_rate')));?>%
+        </div>
+    </div>
+</td>
+</tr>
+</table>
 </fieldset>
 </div>
 <?php

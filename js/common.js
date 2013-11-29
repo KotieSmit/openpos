@@ -40,6 +40,23 @@ function set_feedback(text, classname, keep_displayed)
 	}
 }
 
+function hide2ndTax()
+{
+   $(document).ready(function () {
+        var checkbox = $('#config_use_tax_rate_2');
+        var dependent = $('#config_use_tax_rate_2');
+        if (checkbox.attr('checked') !== undefined){
+           dependent.show();
+        } else {
+            dependent.hide();
+        }
+
+        checkbox.change(function(e){
+           dependent.toggle();
+        });
+    });
+}
+
 //keylisteners
 
 $(window).jkey('f1',function(){

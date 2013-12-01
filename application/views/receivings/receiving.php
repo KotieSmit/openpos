@@ -145,9 +145,21 @@ else
 	?>
 
 	<div id='sale_details'>
-		<div class="float_left" style='width:55%;'><?php echo $this->lang->line('sales_total'); ?>:</div>
-		<div class="float_left" style="width:45%;font-weight:bold;"><?php echo to_currency($total); ?></div>
-	</div>
+        <?php if (!USE_VAT) { ?>
+            <div class="float_left" style='width:55%;'><?php echo $this->lang->line('sales_total'); ?>:</div>
+            <div class="float_left" style="width:45%;font-weight:bold;"><?php echo to_currency($total); ?></div>
+	<?php }else{ ?>
+            <div class="float_left" style='width:55%;'><?php echo $this->lang->line('recvs_subtotal'); ?>:</div>
+            <div class="float_left" style="width:45%;font-weight:bold;"><?php echo to_currency($subtotal); ?></div>
+
+            <div class="float_left" style='width:55%;'><?php echo $this->lang->line('recvs_Tax'); ?>:</div>
+            <div class="float_left" style="width:45%;font-weight:bold;"><?php echo to_currency($tax_amount); ?></div>
+
+            <div class="float_left" style='width:55%;'><?php echo $this->lang->line('sales_total'); ?>:</div>
+            <div class="float_left" style="width:45%;font-weight:bold;"><?php echo to_currency($total); ?></div>
+
+        <?php } ?>
+    </div>
 	<?php
 	if(count($cart) > 0)
 	{

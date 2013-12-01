@@ -2,11 +2,11 @@
 require_once ("secure_area.php");
 class Sales extends Secure_area
 {
+
 	function __construct()
 	{
 		parent::__construct('sales');
 		$this->load->library('sale_lib');
-
 	}
 
 	function index()
@@ -332,7 +332,7 @@ class Sales extends Secure_area
 	function _reload($data=array())
 	{
 		$person_info = $this->Employee->get_logged_in_employee_info();
-        $data['use_vat'] =  $this->config->item('config_use_vat');
+        $data['use_vat'] = USE_VAT;
 		$data['cart']=$this->sale_lib->get_cart();
 		$data['modes']=array('sale'=>$this->lang->line('sales_sale'),'return'=>$this->lang->line('sales_return'));
 		$data['mode']=$this->sale_lib->get_mode();

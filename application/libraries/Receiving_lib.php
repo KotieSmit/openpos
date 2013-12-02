@@ -273,7 +273,7 @@ class Receiving_lib
 
 		foreach($this->get_cart() as $item)		{
             if (USE_VAT) {
-                $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+                $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100) +  $this->get_vat_amount();
             }else{
                 $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
             }

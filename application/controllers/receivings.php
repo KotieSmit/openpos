@@ -169,7 +169,7 @@ class Receivings extends Secure_area
 		$data['cart']=$this->receiving_lib->get_cart();
         $data['modes']=array('receive'=>$this->lang->line('recvs_receiving'),'return'=>$this->lang->line('recvs_return'));
 		$data['mode']=$this->receiving_lib->get_mode();
-		$data['total']=$this->receiving_lib->get_total() + $this->receiving_lib->get_vat_amount();
+		$data['total']=$this->receiving_lib->get_total();
         $data['subtotal']=$this->receiving_lib->get_subtotal();
         $data['tax_amount']=$this->receiving_lib->get_vat_amount();
 		$data['items_module_allowed'] = $this->Employee->has_permission('items', $person_info->person_id);

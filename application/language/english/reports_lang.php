@@ -84,4 +84,5 @@ $lang['reports_detailed_receivings_report'] = 'Detailed Receivings Report';
 $lang['reports_sale_type'] = 'Sale Type';
 $lang['reports_all'] = 'All';
 $lang['reports_returns'] = 'Returns';
+$lang['reports_payments_by_employee_summary_report'] = 'Payments by Employee Summary Report';
 ?>

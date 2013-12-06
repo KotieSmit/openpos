@@ -269,6 +269,8 @@ echo form_submit(array(
             </div>
         </div>
     <?php } ?>
+    <?php echo $paymentMethods ?>
+
 </td>
 </tr>
 </table>

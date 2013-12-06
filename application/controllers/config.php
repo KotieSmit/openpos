@@ -9,7 +9,8 @@ class Config extends Secure_area
 	
 	function index()
 	{
-		$this->load->view("config");
+        $data['paymentMethods'] = $this->createLinks('config/paymentMethods', 'Payment Methods', array('class'=>"thickbox"));
+		$this->load->view("config/config", $data);
 	}
 		
 	function save()
@@ -43,5 +44,17 @@ class Config extends Secure_area
 	
 		}
 	}
+
+    public function createLinks($method, $title,  array $attributes){
+        return anchor($method, $title, $attributes);
+    }
+
+    function paymentMethods(){
+        $data['paymentMethods'] = array(0 => array('name' => 'Cash', 'active' => 1, 'over_tender' => 1, 'is_change' => 1),
+                                        1 => array('name' => 'Card', 'active' => 1, 'over_tender' => 1, 'is_change' => 0),
+                                        2 => array('name' => 'Voucher',  'active' => 1, 'over_tender' => 1, 'is_change' => 0),);
+        $this->load->view("config/payment_methods",$data);
+    }
+
 }
 ?>

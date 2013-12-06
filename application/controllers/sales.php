@@ -91,12 +91,23 @@ class Sales extends Secure_area
 		{
 			$payment_amount=$this->input->post('amount_tendered');
 		}
-		
+		$payment_method_info = $this->Payment_methods->get_info($payment_type);
+        $total = $this->sale_lib->get_amount_due();
+        if ($total < $this->input->post('amount_tendered'))
+        {
+            if (!$payment_method_info->allow_over_tender)
+            {
+                $data['error']='Over tender not allowed with this payment method!';
+                $this->_reload($data);
+                return;
+            }
+        }
+
 		if( !$this->sale_lib->add_payment( $payment_type, $payment_amount ) )
 		{
 			$data['error']='Unable to Add Payment! Please try again!';
 		}
-		
+
 		$this->_reload($data);
 	}
 
@@ -345,13 +356,19 @@ class Sales extends Secure_area
 		$data['payments_total']=$this->sale_lib->get_payments_total();
 		$data['amount_due']=$this->sale_lib->get_amount_due();
 		$data['payments']=$this->sale_lib->get_payments();
-		$data['payment_options']=array(
-			$this->lang->line('sales_cash') => $this->lang->line('sales_cash'),
-			$this->lang->line('sales_check') => $this->lang->line('sales_check'),
-			$this->lang->line('sales_giftcard') => $this->lang->line('sales_giftcard'),
-			$this->lang->line('sales_debit') => $this->lang->line('sales_debit'),
-			$this->lang->line('sales_credit') => $this->lang->line('sales_credit')
-		);
+        $data['payment_methods'] = Payment_methods::get_all();
+        $data['payment_options']=array();
+        foreach ($data['payment_methods'] as $payment_option) {
+		    $data['payment_options'][$payment_option['Name']] =
+                 $this->lang->line($payment_option['language_id']);
+        }
+//		$data['payment_options']=array(
+//			$this->lang->line('sales_cash') => $this->lang->line('sales_cash'),
+//			$this->lang->line('sales_check') => $this->lang->line('sales_check'),
+//			$this->lang->line('sales_giftcard') => $this->lang->line('sales_giftcard'),
+//			$this->lang->line('sales_debit') => $this->lang->line('sales_debit'),
+//			$this->lang->line('sales_credit') => $this->lang->line('sales_credit')
+//		);
 
 		$customer_id=$this->sale_lib->get_customer();
 		if($customer_id!=-1)

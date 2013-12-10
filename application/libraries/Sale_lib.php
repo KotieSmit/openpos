@@ -30,12 +30,25 @@ class Sale_lib
 		return $this->CI->session->userdata('payments');
 	}
 
+    function get_change()
+    {
+        if(!$this->CI->session->userdata('change'))
+            $this->set_change(array());
+
+        return $this->CI->session->userdata('change');
+    }
+
 	//Alain Multiple Payments
 	function set_payments($payments_data)
 	{
 		$this->CI->session->set_userdata('payments',$payments_data);
 	}
-	
+
+    function set_change($change_data)
+    {
+        $this->CI->session->set_userdata('change',$change_data);
+    }
+
 	function get_comment() 
 	{
 		return $this->CI->session->userdata('comment');
@@ -66,18 +79,19 @@ class Sale_lib
 		$this->CI->session->unset_userdata('email_receipt');
 	}
 
-	function add_payment($payment_id,$payment_amount)
+	function add_payment($payment_id,$payment_amount, $reason)
 	{
 		$payments=$this->get_payments();
 		$payment = array($payment_id=>
 		array(
 			'payment_type'=>$payment_id,
-			'payment_amount'=>$payment_amount
+			'payment_amount'=>$payment_amount,
+            'fk_reason'=>$reason
 			)
 		);
 
 		//payment_method already exists, add to payment_amount
-		if(isset($payments[$payment_id]))
+		if(isset($payments[$payment_id]) and $payments[$payment_id]['fk_reason'] == $reason)
 		{
 			$payments[$payment_id]['payment_amount']+=$payment_amount;
 		}
@@ -91,6 +105,21 @@ class Sale_lib
 		return true;
 
 	}
+
+    function add_change($payment_id,$payment_amount, $reason)
+    {
+
+        $change = array($payment_id=>
+        array(
+            'payment_type'=>$payment_id,
+            'payment_amount'=>$payment_amount,
+            'fk_reason'=>$reason
+        )
+        );
+
+        $this->set_change($change);
+        return true;
+    }
 
 	//Alain Multiple Payments
 	function edit_payment($payment_id,$payment_amount)

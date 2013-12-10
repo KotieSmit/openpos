@@ -102,8 +102,16 @@ class Sales extends Secure_area
                 return;
             }
         }
+        $mode = $this->sale_lib->get_mode();
+        switch ($mode)
+        {
+            case 'sale': {$reason = PAYMENT_REASON_SALE; break;}
+            case 'return': {$reason = PAYMENT_REASON_RETURN; break;}
+            case 'change': {$reason = PAYMENT_REASON_CHANGE; break;}
+        }
 
-		if( !$this->sale_lib->add_payment( $payment_type, $payment_amount ) )
+
+		if( !$this->sale_lib->add_payment( $payment_type, $payment_amount, ($reason) ))
 		{
 			$data['error']='Unable to Add Payment! Please try again!';
 		}
@@ -173,7 +181,6 @@ class Sales extends Secure_area
 			$data['warning'] = $this->lang->line('sales_quantity_less_than_zero');
 		}
 
-
 		$this->_reload($data);
 	}
 
@@ -189,6 +196,12 @@ class Sales extends Secure_area
 		$this->_reload();
 	}
 
+//    function get_default_change_method(){
+//        foreach ($this->Payment_methods as $method){
+//
+//        }
+//    }
+
 	function complete()
 	{
 		$data['cart']=$this->sale_lib->get_cart();
@@ -201,8 +214,18 @@ class Sales extends Secure_area
 		$employee_id=$this->Employee->get_logged_in_employee_info()->person_id;
 		$comment = $this->sale_lib->get_comment();
 		$emp_info=$this->Employee->get_info($employee_id);
-		$data['payments']=$this->sale_lib->get_payments();
-		$data['amount_change']=to_currency($this->sale_lib->get_amount_due() * -1);
+
+		$data['amount_change']=$this->sale_lib->get_amount_due();
+
+        if($data['amount_change'] != 0)
+            {
+                $change_method = $this->Payment_methods->get_default_change_method();
+                !$this->sale_lib->add_change($change_method['Name'] , $data['amount_change'], PAYMENT_REASON_CHANGE);
+                $data['change'] = $this->sale_lib->get_change();
+//                $data['payments'] = $this->sale_lib->get_change();
+            }
+        $data['payments']=$this->sale_lib->get_payments();
+        $data['amount_change']=to_currency($data['amount_change'] * -1);
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name;
 
 		if($customer_id!=-1)
@@ -212,7 +235,7 @@ class Sales extends Secure_area
 		}
 
 		//SAVE sale to database
-		$data['sale_id']='POS '.$this->Sale->save($data['cart'], $customer_id,$employee_id,$comment,$data['payments']);
+		$data['sale_id']='POS '.$this->Sale->save($data['cart'], $customer_id,$employee_id,$comment,$data['payments'],False ,$data['change']);
 		if ($data['sale_id'] == 'POS -1')
 		{
 			$data['error_message'] = $this->lang->line('sales_transaction_failed');

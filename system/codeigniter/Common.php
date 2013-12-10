@@ -99,7 +99,7 @@ function is_really_writable($file)
 */
 function &load_class($class, $instantiate = TRUE)
 {
-	static $objects = array();
+  	static $objects = array();
 
 	// Does the class exist?  If so, we're done...
 	if (isset($objects[$class]))

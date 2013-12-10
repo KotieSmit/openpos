@@ -7,6 +7,15 @@
 
 class Payment_methods extends Model{
 
+    function exists($name)
+    {
+        $this->db->from('payment_methods');
+        $this->db->where('Name',$name);
+        $query = $this->db->get();
+
+        return ($query->num_rows()==1);
+    }
+
     function get_info($payment_method_name)
     {
         $query = $this->db->get_where('payment_methods', array('name' => $payment_method_name), 1);
@@ -39,33 +48,42 @@ class Payment_methods extends Model{
         return $this->db->get()->result_array();;
     }
 
+    function get_default_change_method(){
+        $this->db->where('is_change',1);
+        $this->db->select('Name');
+        $this->db->from('payment_methods');
+        return $this->db->get()->row_array();;
+    }
+
     /*
     Inserts or updates a payment_method
     */
-    function save(&$payment_method_data, $payment_method_id=null)
+    function save(&$payment_method_data)
     {
-        if (!$payment_method_id)
-        {
-            if ($this->db->insert('payment_methods',$payment_method_data))
-            {
-                $person_data['payment_methods']=$this->db->insert_id();
-                return true;
+        $result = true;
+        foreach ($payment_method_data as $method){
+            if (is_array($method)){
+                if (!$this->exists($method['name']))
+                {
+                    if ($this->db->insert('payment_methods',$method))
+                    {
+                        $method['payment_methods']=$this->db->insert_id();
+                        return true;
+                    }
+                    $result = false;
+                } else {
+                    $this->db->where('Name', $method['name']);
+                    $this->db->update('payment_methods',$method);
+                }
+                if (!$result) {
+                    return false;
+                }
             }
 
-            return false;
         }
 
-        $this->db->where('person_id', $payment_method_id);
-        return $this->db->update('people',$payment_method_data);
+        return true;
     }
-
-//    function save_multiple(&$items_taxes_data, $item_ids)
-//    {
-//        foreach($item_ids as $item_id)
-//        {
-//            $this->save($items_taxes_data, $item_id);
-//        }
-//    }
 
 }
 ?>

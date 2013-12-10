@@ -25,7 +25,7 @@ class Sale extends Model
 		return $success;
 	}
 	
-	function save ($items,$customer_id,$employee_id,$comment,$payments,$sale_id=false)
+	function save ($items,$customer_id,$employee_id,$comment,$payments,$sale_id=false, $change)
 	{
 		if(count($items)==0)
 			return -1;
@@ -48,7 +48,6 @@ class Sale extends Model
 
 		//Run these queries as a transaction, we want to make sure we do all or nothing
 		$this->db->trans_start();
-
 		$this->db->insert('sales',$sales_data);
 		$sale_id = $this->db->insert_id();
 
@@ -66,10 +65,22 @@ class Sale extends Model
 			(
 				'sale_id'=>$sale_id,
 				'payment_type'=>$payment['payment_type'],
-				'payment_amount'=>$payment['payment_amount']
+				'payment_amount'=>$payment['payment_amount'],
+                'fk_reason'=>$payment['fk_reason']
 			);
 			$this->db->insert('sales_payments',$sales_payments_data);
 		}
+
+        foreach($change as $payment_id=>$value){
+            $sales_payments_data = array
+            (
+                'sale_id'=>$sale_id,
+                'payment_type'=>$value['payment_type'],
+                'payment_amount'=>$value['payment_amount'],
+                'fk_reason'=>$value['fk_reason']
+            );
+            $this->db->insert('sales_payments',$sales_payments_data);
+         }
 
 		foreach($items as $line=>$item)
 		{

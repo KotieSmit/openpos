@@ -10,7 +10,7 @@ echo form_open('config/save_payment_methods/');
             <th>  Name  </th>
             <th>  Active  </th>
             <th>  Can Over Tender  </th>
-            <th>  Give out as Change  </th>>
+            <th>  Give out as Change  </th>
 
         </thead>
         <?php foreach ($paymentMethods as $payment_method) {?>
@@ -19,7 +19,7 @@ echo form_open('config/save_payment_methods/');
                 <td class='form_field'>
                     <?php echo form_input(array(
                             'name'=>'payment_method_'.$payment_method['Name'].'[name]',
-                            'id'=>'name',
+                            'id'=>'name-'.$payment_method['Name'].'[name]',
                             'size'=>'8',
                             'value'=> $payment_method['Name'])
                     );?>
@@ -28,7 +28,7 @@ echo form_open('config/save_payment_methods/');
                 <td class='form_field'>
                     <?php echo form_checkbox(array(
                         'name'=>'payment_method_'.$payment_method['Name'].'[active]',
-                        'id'=>'active',
+                        'id'=>'active-'.$payment_method['Name'].'[name]',
                         'size'=>'3',
                         'value'=> 1,
                         'checked' => $payment_method['active']));
@@ -38,7 +38,7 @@ echo form_open('config/save_payment_methods/');
                 <td class='form_field'>
                     <?php echo form_checkbox(array(
                         'name'=>'payment_method_'.$payment_method['Name'].'[allow_over_tender]',
-                        'id'=>'allow_over_tender',
+                        'id'=>'allow_over_tender-'.$payment_method['Name'].'[name]',
                         'size'=>'3',
                         'value'=> 1,
                         'checked' => $payment_method['allow_over_tender']));
@@ -48,7 +48,7 @@ echo form_open('config/save_payment_methods/');
                 <td class='form_field'>
                     <?php echo form_checkbox(array(
                         'name'=>'payment_method_'.$payment_method['Name'].'[is_change]',
-                        'id'=>'is_change',
+                        'id'=>'is_change'.$payment_method['Name'].'[name]',
                         'size'=>'3',
                         'value'=> 1,
                         'checked' => $payment_method['is_change']));

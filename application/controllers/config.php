@@ -47,8 +47,19 @@ class Config extends Secure_area
 
     function save_payment_methods()
     {
-        $data = $_POST;
-        $this->Payment_methods->save($data);
+        $methods = $_POST;
+        $payment_methods = array();
+        foreach ($methods as $method){
+            if (is_array($method)){
+                $payment_method = array($method['name'] => array(
+                    'name' => $method['name'],
+                    'active' => (isset($method['active'])) ? 1 : 0,
+                    'allow_over_tender' => (isset($method['allow_over_tender'])) ? 1 : 0,
+                    'is_change' => (isset($method['is_change'])) ? 1 : 0));
+                $payment_methods += $payment_method;
+            }
+        }
+        $this->Payment_methods->save($payment_methods);
         $this->_reload();
     }
 

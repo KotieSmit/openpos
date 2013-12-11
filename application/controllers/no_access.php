@@ -1,5 +1,5 @@
 <?php
-class No_Access extends CI_Controller 
+class No_Access extends Controller 
 {
 	function __construct()
 	{

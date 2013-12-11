@@ -9,7 +9,7 @@
 | and its corresponding controller class/method. The segments in a
 | URL normally follow this pattern:
 |
-|	example.com/class/method/id/
+| 	example.com/class/method/id/
 |
 | In some instances, however, you may want to remap this relationship
 | so that a different class/function is called than the one
@@ -23,7 +23,7 @@
 | RESERVED ROUTES
 | -------------------------------------------------------------------------
 |
-| There area two reserved routes:
+| There are two reserved routes:
 |
 |	$route['default_controller'] = 'welcome';
 |
@@ -31,18 +31,14 @@
 | URI contains no data. In the above example, the "welcome" class
 | would be loaded.
 |
-|	$route['404_override'] = 'errors/page_missing';
+|	$route['scaffolding_trigger'] = 'scaffolding';
 |
-| This route will tell the Router what URI segments to use if those provided
-| in the URL cannot be matched to a valid route.
+| This route lets you set a "secret" word that will trigger the
+| scaffolding feature for added security. Note: Scaffolding must be
+| enabled in the controller in which you intend to use it.   The reserved 
+| routes must come before any wildcard or regular expression routes.
 |
 */
-//$route['news/create'] = 'news/create';
-//$route['news/(:any)'] = 'news/view/$1';
-//$route['news'] = 'news';
-//$route['(:any)'] = 'pages/view/$1';
-//$route['default_controller'] = 'pages/view';
-
 
 $route['default_controller'] = "login";
 $route['no_access/(:any)'] = "no_access/index/$1";
@@ -60,9 +56,10 @@ $route['reports/detailed_receivings'] = "reports/date_input";
 $route['reports/(specific_:any)/(:any)/(:any)/(:any)'] = "reports/$1/$2/$3/$4";
 $route['reports/specific_customer'] = "reports/specific_customer_input";
 $route['reports/specific_employee'] = "reports/specific_employee_input";
+$route['reports/specific_employee_payments'] = "reports/specific_employee_input";
+
 $route['scaffolding_trigger'] = "";
 
-$route['404_override'] = 'errors/page_missing';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

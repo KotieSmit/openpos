@@ -1,5 +1,5 @@
 <?php
-class Item_taxes extends CI_Model
+class Item_taxes extends Model
 {
 	/*
 	Gets tax info for a particular item

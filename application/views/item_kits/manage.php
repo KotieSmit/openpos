@@ -18,7 +18,7 @@ $(document).ready(function()
     		return false;
     	}
 
-    	$(this).attr('href','index.php/item_kits/generate_barcodes/'+selected.join(':'));
+    	$(this).attr('href','index.php/item_kits/generate_barcodes/'+selected.join(','));
     });
     
 });
@@ -71,7 +71,7 @@ function post_item_kit_form_submit(response)
 <div id="title_bar">
 	<div id="title" class="float_left"><?php echo $this->lang->line('common_list_of').' '.$this->lang->line('module_'.$controller_name); ?></div>
 	<div id="new_button">
-		<?php echo anchor("$controller_name/view/-1",
+		<?php echo anchor("$controller_name/view/-1/width:$form_width",
 		"<div class='big_button' style='float: left;'><span>".$this->lang->line($controller_name.'_new')."</span></div>",
 		array('class'=>'thickbox none','title'=>$this->lang->line($controller_name.'_new')));
 		?>

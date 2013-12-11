@@ -24,18 +24,31 @@ class Sale_lib
 	//Alain Multiple Payments
 	function get_payments()
 	{
-		if( !$this->CI->session->userdata( 'payments' ) )
-			$this->set_payments( array( ) );
+		if(!$this->CI->session->userdata('payments'))
+			$this->set_payments(array());
 
 		return $this->CI->session->userdata('payments');
 	}
+
+    function get_change()
+    {
+        if(!$this->CI->session->userdata('change'))
+            $this->set_change(array());
+
+        return $this->CI->session->userdata('change');
+    }
 
 	//Alain Multiple Payments
 	function set_payments($payments_data)
 	{
 		$this->CI->session->set_userdata('payments',$payments_data);
 	}
-	
+
+    function set_change($change_data)
+    {
+        $this->CI->session->set_userdata('change',$change_data);
+    }
+
 	function get_comment() 
 	{
 		return $this->CI->session->userdata('comment');
@@ -66,31 +79,47 @@ class Sale_lib
 		$this->CI->session->unset_userdata('email_receipt');
 	}
 
-	function add_payment( $payment_id, $payment_amount )
+	function add_payment($payment_id,$payment_amount, $reason)
 	{
-		$payments = $this->get_payments();
-		$payment = array( $payment_id=>
+		$payments=$this->get_payments();
+		$payment = array($payment_id=>
 		array(
-			'payment_type' => $payment_id,
-			'payment_amount' => $payment_amount
+			'payment_type'=>$payment_id,
+			'payment_amount'=>$payment_amount,
+            'fk_reason'=>$reason
 			)
 		);
 
 		//payment_method already exists, add to payment_amount
-		if( isset( $payments[$payment_id] ) )
+		if(isset($payments[$payment_id]) and $payments[$payment_id]['fk_reason'] == $reason)
 		{
-			$payments[$payment_id]['payment_amount'] += $payment_amount;
+			$payments[$payment_id]['payment_amount']+=$payment_amount;
 		}
 		else
 		{
 			//add to existing array
-			$payments += $payment;
+			$payments+=$payment;
 		}
 
-		$this->set_payments( $payments );
+		$this->set_payments($payments);
 		return true;
 
 	}
+
+    function add_change($payment_id,$payment_amount, $reason)
+    {
+
+        $change = array($payment_id=>
+        array(
+            'payment_type'=>$payment_id,
+            'payment_amount'=>$payment_amount,
+            'fk_reason'=>$reason
+        )
+        );
+
+        $this->set_change($change);
+        return true;
+    }
 
 	//Alain Multiple Payments
 	function edit_payment($payment_id,$payment_amount)
@@ -107,11 +136,11 @@ class Sale_lib
 	}
 
 	//Alain Multiple Payments
-	function delete_payment( $payment_id )
+	function delete_payment($payment_id)
 	{
-		$payments = $this->get_payments();
-		unset( $payments[urldecode( $payment_id )] );
-		$this->set_payments( $payments );
+		$payments=$this->get_payments();
+		unset($payments[$payment_id]);
+		$this->set_payments($payments);
 	}
 
 	//Alain Multiple Payments
@@ -455,10 +484,12 @@ class Sale_lib
 			foreach($tax_info as $tax)
 			{
 				$name = $tax['percent'].'% ' . $tax['name'];
-//				$tax_amount=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
-                                $grand_total = ($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
-                                $tax_amount=$grand_total - $grand_total/(1 + ($tax['percent'])/100);
-
+                if (USE_VAT) {
+                    $line_total = ($item['price'] * $item['quantity']) - (($item['price'] * $item['quantity']) * ($item['discount']/100));
+				    $tax_amount=($line_total -($line_total / (1 + ($tax['percent']/100))));
+                }else{
+                    $tax_amount=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100)*(($tax['percent'])/100);
+                }
 				if (!isset($taxes[$name]))
 				{
 					$taxes[$name] = 0;
@@ -470,17 +501,31 @@ class Sale_lib
 		return $taxes;
 	}
 
+    function get_vat_amount()
+    {
+        foreach($this->get_cart() as $line=>$item)
+        {
+            $tax_info = $this->CI->Item_taxes->get_info($item['item_id']);
+            foreach($tax_info as $tax)
+            {
+                $line_total = ($item['price'] * $item['quantity']) - (($item['price'] * $item['quantity']) * ($item['discount']/100));
+                $tax_amount=($line_total -($line_total / (1 + ($tax['percent']/100))));
+            }
+        }
+        return $tax_amount;
+    }
+
 	function get_subtotal()
 	{
 		$subtotal = 0;
+
 		foreach($this->get_cart() as $item)
 		{
-		    $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
-		}
-                
-		foreach($this->get_taxes() as $tax)
-		{
-			$subtotal-=$tax;
+            if (USE_VAT) {
+                $subtotal = $this->get_total()- $this->get_vat_amount();
+            }else{
+                $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+            }
 		}
 		return to_currency_no_money($subtotal);
 	}
@@ -490,13 +535,13 @@ class Sale_lib
 		$total = 0;
 		foreach($this->get_cart() as $item)
 		{
-            $total += ( $item['price'] * $item['quantity'] - $item['price'] * $item['quantity'] * $item['discount'] / 100);
+            $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
 		}
 
-//		foreach($this->get_taxes() as $tax)
-//		{
-//			$total+=$tax;
-//		}
+		foreach($this->get_taxes() as $tax)
+		{
+            if (!USE_VAT) {$total+=$tax;}
+    	}
 
 		return to_currency_no_money($total);
 	}

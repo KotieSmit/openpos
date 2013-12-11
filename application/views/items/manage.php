@@ -19,7 +19,7 @@ $(document).ready(function()
     		return false;
     	}
 
-    	$(this).attr('href','index.php/items/generate_barcodes/'+selected.join(':'));
+    	$(this).attr('href','index.php/items/generate_barcodes/'+selected.join(','));
     });
 
     $("#low_inventory").click(function()
@@ -125,11 +125,11 @@ function show_hide_search_filter(search_filter_section, switchImgTag) {
 <div id="title_bar">
 	<div id="title" class="float_left"><?php echo $this->lang->line('common_list_of').' '.$this->lang->line('module_'.$controller_name); ?></div>
 	<div id="new_button">
-		<?php echo anchor("$controller_name/view/-1",
+		<?php echo anchor("$controller_name/view/-1/width:$form_width",
 		"<div class='big_button' style='float: left;'><span>".$this->lang->line($controller_name.'_new')."</span></div>",
 		array('class'=>'thickbox none','title'=>$this->lang->line($controller_name.'_new')));
 		?>
-		<?php echo anchor("$controller_name/excel_import/",
+		<?php echo anchor("$controller_name/excel_import/width:$form_width",
 		"<div class='big_button' style='float: left;'><span>Excel Import</span></div>",
 		array('class'=>'thickbox none','title'=>'Import Items from Excel'));
 		?>

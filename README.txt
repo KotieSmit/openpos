@@ -1,7 +1,10 @@
+MySQL User Creation
+-------------------------
+CREATE USER 'openpos'@'localhost' IDENTIFIED BY  'openpos';
+GRANT USAGE ON * . * TO  'openpos'@'localhost' IDENTIFIED BY  'openpos' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
+CREATE DATABASE IF NOT EXISTS  `openpos` ;
+GRANT ALL PRIVILEGES ON  `openpos` . * TO  'openpos'@'localhost';
 
-Changes from orginal:
- - Changed tax calcultion from GST to VAT (for use for South Africa)
- - Start adding a second sales screen, to be used for touch screen driven sales (Still work-in-progress)
 
 How to Install
 -------------------------
@@ -10,9 +13,8 @@ How to Install
 3. unzip and upload Open Source Point of Sale files to web server
 4. Copy application/config/database.php.tmpl to application/config/database.php
 5. Modify application/config/database.php to connect to your database
-6. Modify application/config/config.php encryption key with your own
-7. Go to your point of sale install via the browser
-8. LOGIN using
+6. Go to your point of sale install via the browser
+7. LOGIN using
 username: admin 
 password:pointofsale
-9. Enjoy
+8. Enjoy

@@ -9,15 +9,14 @@ class Employees extends Person_controller
 	
 	function index()
 	{
-		$config['base_url'] = site_url('/employees/index');
+		$config['base_url'] = site_url('?c=employees&m=index');
 		$config['total_rows'] = $this->Employee->count_all();
-		$config['per_page'] = '20';
-		$config['uri_segment'] = 3;
+		$config['per_page'] = '20'; 
 		$this->pagination->initialize($config);
 		
 		$data['controller_name']=strtolower(get_class());
 		$data['form_width']=$this->get_form_width();
-		$data['manage_table']=get_people_manage_table( $this->Employee->get_all( $config['per_page'], $this->uri->segment( $config['uri_segment'] ) ), $this );
+		$data['manage_table']=get_people_manage_table($this->Employee->get_all($config['per_page'], $this->input->get('per_page')),$this);
 		$this->load->view('people/manage',$data);
 	}
 	
@@ -83,7 +82,13 @@ class Employees extends Person_controller
 			$employee_data=array('username'=>$this->input->post('username'));
 		}
 		
-		if($this->Employee->save($person_data,$employee_data,$permission_data,$employee_id))
+		if ($_SERVER['HTTP_HOST'] == 'ospos.pappastech.com' && $employee_id == 1)
+		{
+			//failure
+			echo json_encode(array('success'=>false,'message'=>$this->lang->line('employees_error_updating_demo_admin').' '.
+			$person_data['first_name'].' '.$person_data['last_name'],'person_id'=>-1));
+		}
+		elseif($this->Employee->save($person_data,$employee_data,$permission_data,$employee_id))
 		{
 			//New employee
 			if($employee_id==-1)
@@ -111,7 +116,12 @@ class Employees extends Person_controller
 	{
 		$employees_to_delete=$this->input->post('ids');
 		
-		if($this->Employee->delete_list($employees_to_delete))
+		if ($_SERVER['HTTP_HOST'] == 'ospos.pappastech.com' && in_array(1,$employees_to_delete))
+		{
+			//failure
+			echo json_encode(array('success'=>false,'message'=>$this->lang->line('employees_error_deleting_demo_admin')));
+		}
+		elseif($this->Employee->delete_list($employees_to_delete))
 		{
 			echo json_encode(array('success'=>true,'message'=>$this->lang->line('employees_successful_deleted').' '.
 			count($employees_to_delete).' '.$this->lang->line('employees_one_or_multiple')));

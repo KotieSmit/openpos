@@ -18,9 +18,9 @@
 |
 | These are the things you can load automatically:
 |
-| 1. Packages
-| 2. Libraries
-| 3. Helper files
+| 1. Libraries
+| 2. Helper files
+| 3. Plugins
 | 4. Custom config files
 | 5. Language files
 | 6. Models
@@ -29,23 +29,10 @@
 
 /*
 | -------------------------------------------------------------------
-|  Auto-load Packges
-| -------------------------------------------------------------------
-| Prototype:
-|
-|  $autoload['packages'] = array(APPPATH.'third_party', '/usr/local/shared');
-|
-*/
-
-$autoload['packages'] = array();
-
-
-/*
-| -------------------------------------------------------------------
 |  Auto-load Libraries
 | -------------------------------------------------------------------
 | These are the classes located in the system/libraries folder
-| or in your application/libraries folder.
+| or in your system/application/libraries folder.
 |
 | Prototype:
 |
@@ -64,7 +51,20 @@ $autoload['libraries'] = array('database','form_validation','session','user_agen
 |	$autoload['helper'] = array('url', 'file');
 */
 
+//sale
 $autoload['helper'] = array('form','url','table','text','currency', 'html', 'download');
+
+
+/*
+| -------------------------------------------------------------------
+|  Auto-load Plugins
+| -------------------------------------------------------------------
+| Prototype:
+|
+|	$autoload['plugin'] = array('captcha', 'js_calendar');
+*/
+
+$autoload['plugin'] = array();
 
 
 /*
@@ -95,8 +95,7 @@ $autoload['config'] = array();
 | "codeigniter_lang.php" would be referenced as array('codeigniter');
 |
 */
-
-$autoload['language'] = array('common', 'config', 'customers', 'employees', 'error', 'items', 'login', 'module', 'reports', 'sales','suppliers','receivings','giftcards', 'item_kits');
+$autoload['language'] = array('common', 'config', 'customers', 'employees', 'error', 'items', 'login', 'module', 'reports', 'sales','suppliers','receivings','giftcards', 'item_kits', 'payment_methods');
 
 
 /*
@@ -109,7 +108,19 @@ $autoload['language'] = array('common', 'config', 'customers', 'employees', 'err
 |
 */
 
-$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module','Item', 'Item_taxes', 'Sale', 'Sale_suspended', 'Supplier','Inventory','Receiving','Giftcard', 'Item_kit', 'Item_kit_items');
+$autoload['model'] = array('Appconfig','Person','Customer','Employee','Module','Item', 'Item_taxes', 'Sale', 'Sale_suspended', 'Supplier','Inventory','Receiving','Giftcard', 'Item_kit', 'Item_kit_items','Payment_methods');
+
+
+/*
+| -------------------------------------------------------------------
+|  Auto-load Core Libraries
+| -------------------------------------------------------------------
+|
+| DEPRECATED:  Use $autoload['libraries'] above instead.
+|
+*/
+// $autoload['core'] = array();
+
 
 
 /* End of file autoload.php */

@@ -22,7 +22,7 @@ $lang['common_search']='Search';
 $lang['common_delete']='Delete';
 $lang['common_remove']='Remove';
 $lang['common_view_recent_sales']='View Recent Sales';
-$lang['common_you_are_using_ospos']='You are using Open Source Point Of Sale Version';
+$lang['common_you_are_using_ospos']='You are using Version';
 $lang['common_please_visit_my']='Please visit my';
 $lang['common_website']='website';
 $lang['common_fields_required_message']='Fields in red are required';
@@ -35,7 +35,7 @@ $lang['common_confirm_search']='You have selected one or more rows, these will n
 $lang['common_no_persons_to_display']='There are no people to display';
 $lang['common_return_policy']='Return Policy';
 $lang['common_price']='Price';
-$lang['common_welcome_message']= 'Welcome to Open Source Point Of Sale, click a module below to get started!';
+$lang['common_welcome_message']= 'Welcome, click a module below to get started!';
 $lang['common_inv']='inv';
 $lang['common_det']='details';
 ?>

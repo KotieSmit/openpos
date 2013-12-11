@@ -28,6 +28,7 @@
 			<li><a href="<?php echo site_url('reports/summary_taxes');?>"><?php echo $this->lang->line('reports_taxes'); ?></a></li>
 			<li><a href="<?php echo site_url('reports/summary_discounts');?>"><?php echo $this->lang->line('reports_discounts'); ?></a></li>
 			<li><a href="<?php echo site_url('reports/summary_payments');?>"><?php echo $this->lang->line('reports_payments'); ?></a></li>
+            <li><a href="<?php echo site_url('reports/specific_employee_payments');?>"><?php echo $this->lang->line('reports_payments_by_employee_summary_report'); ?></a></li>
 		</ul>
 	</li>
 	

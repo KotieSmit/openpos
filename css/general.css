@@ -62,12 +62,13 @@ label.required
 {
 	position:absolute;
 	width:100%;
-	top:30%;
+	top:0%;
 	left:0%;
 	color:#FFF;
 	font-size:11px;
 	font-weight:bold;
 	text-align:center;
+    padding: 5px;
 }
 
 .float_left
@@ -94,11 +95,12 @@ label.required
 {
 	position:absolute;
 	width:100%;
-	top:35%;
+	top:15;
 	color:#FFF;
-	font-size:13px;
+	font-size:12px;
 	font-weight:bold;
 	text-align:center;
+    padding: 5px;
 }
 
 

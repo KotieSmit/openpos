@@ -2,6 +2,7 @@
 require_once ("secure_area.php");
 class Sales extends Secure_area
 {
+
 	function __construct()
 	{
 		parent::__construct('sales');
@@ -53,57 +54,75 @@ class Sales extends Secure_area
 	//Alain Multiple Payments
 	function add_payment()
 	{		
-		$data = array();
-		$this->form_validation->set_rules( 'amount_tendered', 'lang:sales_amount_tendered', 'numeric' );
+		$data=array();
+		$this->form_validation->set_rules('amount_tendered', 'lang:sales_amount_tendered', 'numeric');
 		
-		if ( $this->form_validation->run() == FALSE )
+		if ($this->form_validation->run() == FALSE)
 		{
-			if ( $this->input->post( 'payment_type' ) == $this->lang->line( 'sales_gift_card' ) )
+			if ( $this->input->post('payment_type') == $this->lang->line('sales_gift_card') )
 				$data['error']=$this->lang->line('sales_must_enter_numeric_giftcard');
 			else
 				$data['error']=$this->lang->line('sales_must_enter_numeric');
 				
- 			$this->_reload( $data );
+ 			$this->_reload($data);
  			return;
 		}
 		
-		$payment_type = $this->input->post( 'payment_type' );
-		if ( $payment_type == $this->lang->line( 'sales_giftcard' ) )
+		$payment_type=$this->input->post('payment_type');
+		if ( $payment_type == $this->lang->line('sales_giftcard') )
 		{
 			$payments = $this->sale_lib->get_payments();
-			$payment_type = $this->input->post( 'payment_type' ) . ':' . $payment_amount = $this->input->post( 'amount_tendered' );
-			$current_payments_with_giftcard = isset( $payments[$payment_type] ) ? $payments[$payment_type]['payment_amount'] : 0;
-			$cur_giftcard_value = $this->Giftcard->get_giftcard_value( $this->input->post( 'amount_tendered' ) ) - $current_payments_with_giftcard;
-			
+			$payment_type=$this->input->post('payment_type').':'.$payment_amount=$this->input->post('amount_tendered');
+			$current_payments_with_giftcard = isset($payments[$payment_type]) ? $payments[$payment_type]['payment_amount'] : 0;
+			$cur_giftcard_value = $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) - $current_payments_with_giftcard;
 			if ( $cur_giftcard_value <= 0 )
 			{
-				$data['error'] = 'Giftcard balance is ' . to_currency( $this->Giftcard->get_giftcard_value( $this->input->post( 'amount_tendered' ) ) ) . ' !';
-				$this->_reload( $data );
+				$data['error']='Giftcard balance is '.to_currency( $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) ).' !';
+				$this->_reload($data);
 				return;
 			}
-
-			$new_giftcard_value = $this->Giftcard->get_giftcard_value( $this->input->post( 'amount_tendered' ) ) - $this->sale_lib->get_amount_due( );
-			$new_giftcard_value = ( $new_giftcard_value >= 0 ) ? $new_giftcard_value : 0;
-			$data['warning'] = 'Giftcard ' . $this->input->post( 'amount_tendered' ) . ' balance is ' . to_currency( $new_giftcard_value ) . ' !';
-			$payment_amount = min( $this->sale_lib->get_amount_due( ), $this->Giftcard->get_giftcard_value( $this->input->post( 'amount_tendered' ) ) );
+			elseif ( ( $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) - $this->sale_lib->get_total() ) > 0 )
+			{
+				$data['warning']='Giftcard balance is '.to_currency( $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) - $this->sale_lib->get_total() ).' !';
+			}
+			$payment_amount=min( $this->sale_lib->get_total(), $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) );
 		}
 		else
 		{
-			$payment_amount = $this->input->post( 'amount_tendered' );
+			$payment_amount=$this->input->post('amount_tendered');
 		}
-		
-		if( !$this->sale_lib->add_payment( $payment_type, $payment_amount ) )
+		$payment_method_info = $this->Payment_methods->get_info($payment_type);
+        $total = $this->sale_lib->get_amount_due();
+        if ($total < $this->input->post('amount_tendered'))
+        {
+            if (!$payment_method_info->allow_over_tender)
+            {
+                $data['error']='Over tender not allowed with this payment method!';
+                $this->_reload($data);
+                return;
+            }
+        }
+        $mode = $this->sale_lib->get_mode();
+        switch ($mode)
+        {
+            case 'sale': {$reason = PAYMENT_REASON_SALE; break;}
+            case 'return': {$reason = PAYMENT_REASON_RETURN; break;}
+            case 'change': {$reason = PAYMENT_REASON_CHANGE; break;}
+        }
+
+
+		if( !$this->sale_lib->add_payment( $payment_type, $payment_amount, ($reason) ))
 		{
 			$data['error']='Unable to Add Payment! Please try again!';
 		}
-		
+
 		$this->_reload($data);
 	}
 
 	//Alain Multiple Payments
-	function delete_payment( $payment_id )
+	function delete_payment($payment_id)
 	{
-		$this->sale_lib->delete_payment( $payment_id );
+		$this->sale_lib->delete_payment($payment_id);
 		$this->_reload();
 	}
 
@@ -162,7 +181,6 @@ class Sales extends Secure_area
 			$data['warning'] = $this->lang->line('sales_quantity_less_than_zero');
 		}
 
-
 		$this->_reload($data);
 	}
 
@@ -178,6 +196,12 @@ class Sales extends Secure_area
 		$this->_reload();
 	}
 
+//    function get_default_change_method(){
+//        foreach ($this->Payment_methods as $method){
+//
+//        }
+//    }
+
 	function complete()
 	{
 		$data['cart']=$this->sale_lib->get_cart();
@@ -190,8 +214,22 @@ class Sales extends Secure_area
 		$employee_id=$this->Employee->get_logged_in_employee_info()->person_id;
 		$comment = $this->sale_lib->get_comment();
 		$emp_info=$this->Employee->get_info($employee_id);
-		$data['payments']=$this->sale_lib->get_payments();
-		$data['amount_change']=to_currency($this->sale_lib->get_amount_due() * -1);
+
+		$data['amount_change']=$this->sale_lib->get_amount_due();
+
+        if($data['amount_change'] != 0)
+            {
+                $change_method = $this->Payment_methods->get_default_change_method();
+                !$this->sale_lib->add_change($change_method['Name'] , $data['amount_change'], PAYMENT_REASON_CHANGE);
+                $data['change'] = $this->sale_lib->get_change();
+//                $data['payments'] = $this->sale_lib->get_change();
+            }
+        else
+        {
+            $data['change'] = 0;
+        }
+        $data['payments']=$this->sale_lib->get_payments();
+        $data['amount_change']=to_currency($data['amount_change'] * -1);
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name;
 
 		if($customer_id!=-1)
@@ -201,7 +239,7 @@ class Sales extends Secure_area
 		}
 
 		//SAVE sale to database
-		$data['sale_id']='POS '.$this->Sale->save($data['cart'], $customer_id,$employee_id,$comment,$data['payments']);
+		$data['sale_id']='POS '.$this->Sale->save($data['cart'], $customer_id,$employee_id,$comment,$data['payments'],False ,$data['change']);
 		if ($data['sale_id'] == 'POS -1')
 		{
 			$data['error_message'] = $this->lang->line('sales_transaction_failed');
@@ -332,6 +370,7 @@ class Sales extends Secure_area
 	function _reload($data=array())
 	{
 		$person_info = $this->Employee->get_logged_in_employee_info();
+        $data['use_vat'] = USE_VAT;
 		$data['cart']=$this->sale_lib->get_cart();
 		$data['modes']=array('sale'=>$this->lang->line('sales_sale'),'return'=>$this->lang->line('sales_return'));
 		$data['mode']=$this->sale_lib->get_mode();
@@ -344,13 +383,19 @@ class Sales extends Secure_area
 		$data['payments_total']=$this->sale_lib->get_payments_total();
 		$data['amount_due']=$this->sale_lib->get_amount_due();
 		$data['payments']=$this->sale_lib->get_payments();
-		$data['payment_options']=array(
-			$this->lang->line('sales_cash') => $this->lang->line('sales_cash'),
-			$this->lang->line('sales_check') => $this->lang->line('sales_check'),
-			$this->lang->line('sales_giftcard') => $this->lang->line('sales_giftcard'),
-			$this->lang->line('sales_debit') => $this->lang->line('sales_debit'),
-			$this->lang->line('sales_credit') => $this->lang->line('sales_credit')
-		);
+        $data['payment_methods'] = Payment_methods::get_all();
+        $data['payment_options']=array();
+        foreach ($data['payment_methods'] as $payment_option) {
+		    $data['payment_options'][$payment_option['Name']] =
+                 $this->lang->line($payment_option['language_id']);
+        }
+//		$data['payment_options']=array(
+//			$this->lang->line('sales_cash') => $this->lang->line('sales_cash'),
+//			$this->lang->line('sales_check') => $this->lang->line('sales_check'),
+//			$this->lang->line('sales_giftcard') => $this->lang->line('sales_giftcard'),
+//			$this->lang->line('sales_debit') => $this->lang->line('sales_debit'),
+//			$this->lang->line('sales_credit') => $this->lang->line('sales_credit')
+//		);
 
 		$customer_id=$this->sale_lib->get_customer();
 		if($customer_id!=-1)

@@ -1,9 +1,9 @@
 <?php
-abstract class Report extends CI_Model 
+abstract class Report extends Model 
 {
 	function __construct()
 	{
-		parent::__construct();
+		parent::Model();
 
 		//Make sure the report is not cached by the browser
 		$this->output->set_header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");

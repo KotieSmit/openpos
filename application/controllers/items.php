@@ -10,15 +10,14 @@ class Items extends Secure_area implements iData_controller
 
 	function index()
 	{
-		$config['base_url'] = site_url('/items/index');
+		$config['base_url'] = site_url('?c=items&m=index');
 		$config['total_rows'] = $this->Item->count_all();
-		$config['per_page'] = '20';
-		$config['uri_segment'] = 3;
+		$config['per_page'] = '20'; 
 		$this->pagination->initialize($config);
 		
 		$data['controller_name']=strtolower(get_class());
 		$data['form_width']=$this->get_form_width();
-		$data['manage_table']=get_items_manage_table( $this->Item->get_all( $config['per_page'], $this->uri->segment( $config['uri_segment'] ) ), $this );
+		$data['manage_table']=get_items_manage_table($this->Item->get_all($config['per_page'], $this->input->get('per_page')),$this);
 		$this->load->view('items/manage',$data);
 	}
 
@@ -116,7 +115,7 @@ class Items extends Secure_area implements iData_controller
 	{
 		$result = array();
 
-		$item_ids = explode(':', $item_ids);
+		$item_ids = explode(',', $item_ids);
 		foreach ($item_ids as $item_id)
 		{
 			$item_info = $this->Item->get_info($item_id);

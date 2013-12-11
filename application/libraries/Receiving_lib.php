@@ -237,12 +237,46 @@ class Receiving_lib
 		$this->delete_supplier();
 	}
 
+    function get_vat_amount()
+    {
+        if (!USE_VAT) return 0;
+        $tax_amount = 0;
+        foreach($this->get_cart() as $item)
+        {
+            $tax_info = $this->CI->Item_taxes->get_info($item['item_id']);
+            foreach($tax_info as $tax)
+            {
+                $line_total = ($item['price'] * $item['quantity']) - (($item['price'] * $item['quantity']) * ($item['discount']/100));
+//                $tax_amount += ($line_total -($line_total / (1 + ($tax['percent']/100))));  //Enter as inclusiv
+                $tax_amount += ($line_total * ($tax['percent']/100));
+            }
+        }
+        return $tax_amount;
+    }
+
+    function get_subtotal()
+    {
+        if (!USE_VAT) return 0;
+        $subtotal = 0;
+        $total = 0;
+
+        foreach($this->get_cart() as $item)
+        {
+            $subtotal+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+        }
+        return to_currency_no_money($subtotal);
+    }
+
 	function get_total()
 	{
 		$total = 0;
-		foreach($this->get_cart() as $item)
-		{
-            $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+
+		foreach($this->get_cart() as $item)		{
+            if (USE_VAT) {
+                $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100) +  $this->get_vat_amount();
+            }else{
+                $total+=($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100);
+            }
 		}
 		
 		return $total;

@@ -8,7 +8,8 @@
 
 #customer_basic_info,#item_basic_info,#item_number_info,#supplier_basic_info
 {
-	padding: 5px;
+	padding:5px;
+
 }
 
 #scan_item_number.loading
@@ -16,6 +17,7 @@
 	background-image: url(../images/spinner_small.gif);
 	background-position:center right;
 	background-repeat:no-repeat;	
+	
 }
 
 #info_provided_by

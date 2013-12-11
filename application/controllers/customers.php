@@ -9,15 +9,14 @@ class Customers extends Person_controller
 	
 	function index()
 	{
-		$config['base_url'] = site_url('/customers/index');
+		$config['base_url'] = site_url('?c=customers&m=index');
 		$config['total_rows'] = $this->Customer->count_all();
-		$config['per_page'] = '20';
-		$config['uri_segment'] = 3;
+		$config['per_page'] = '20'; 
 		$this->pagination->initialize($config);
 		
 		$data['controller_name']=strtolower(get_class());
-//		$data['form_width']=$this->get_form_width();
-		$data['manage_table']=get_people_manage_table( $this->Customer->get_all( $config['per_page'], $this->uri->segment( $config['uri_segment'] ) ), $this );
+		$data['form_width']=$this->get_form_width();
+		$data['manage_table']=get_people_manage_table($this->Customer->get_all($config['per_page'], $this->input->get('per_page')),$this);
 		$this->load->view('people/manage',$data);
 	}
 	

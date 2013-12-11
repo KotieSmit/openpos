@@ -1,5 +1,5 @@
 <?php
-class Item_kit_items extends CI_Model
+class Item_kit_items extends Model
 {
 	/*
 	Gets item kit items for a particular item kit

@@ -1,5 +1,5 @@
 <?php
-class Sale_suspended extends CI_Model
+class Sale_suspended extends Model
 {
 	function get_all()
 	{

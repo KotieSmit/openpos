@@ -3,7 +3,7 @@
 <?php
 echo form_open('giftcards/save/'.$giftcard_info->giftcard_id,array('id'=>'giftcard_form'));
 ?>
-<fieldset id="giftcard_basic_info" style="padding: 5px;">
+<fieldset id="giftcard_basic_info">
 <legend><?php echo $this->lang->line("giftcards_basic_information"); ?></legend>
 
 <div class="field_row clearfix">
@@ -11,6 +11,7 @@ echo form_open('giftcards/save/'.$giftcard_info->giftcard_id,array('id'=>'giftca
 	<div class='form_field'>
 	<?php echo form_input(array(
 		'name'=>'giftcard_number',
+		'size'=>'8',
 		'id'=>'giftcard_number',
 		'value'=>$giftcard_info->giftcard_number)
 	);?>
@@ -22,6 +23,7 @@ echo form_open('giftcards/save/'.$giftcard_info->giftcard_id,array('id'=>'giftca
 	<div class='form_field'>
 	<?php echo form_input(array(
 		'name'=>'value',
+		'size'=>'8',
 		'id'=>'value',
 		'value'=>$giftcard_info->value)
 	);?>

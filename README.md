@@ -27,5 +27,10 @@ password: pointofsale
 
 Changes:
 
-- Can now st tax system to be used in the constants file:  USE_VAT true/false
+- Can now set tax system to be used in the constants file:  USE_VAT true/false
 - Sales, receiving and reports have been changed to report VAT and GST
+- Payment methods are now configurable. The following can now be set:
+    * Active
+    * Over tender allowed
+    * Tender given out as change
+

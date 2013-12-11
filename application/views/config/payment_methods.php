@@ -1,4 +1,3 @@
-<div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div>
 <ul id="error_message_box"></ul>
 <?php
 echo form_open('config/save_payment_methods/');
@@ -7,10 +6,10 @@ echo form_open('config/save_payment_methods/');
     <legend><?php echo $this->lang->line("payment_method_setup"); ?></legend>
     <table border="1" width="100%" class="field_row clearfix">
         <thead>
-            <th>  Name  </th>
-            <th>  Active  </th>
-            <th>  Can Over Tender  </th>
-            <th>  Give out as Change  </th>
+            <th align="left">  Name  </th>
+            <th align="left">  Active  </th>
+            <th align="left">  Can Over Tender  </th>
+            <th align="left">  Give out as Change  </th>
 
         </thead>
         <?php foreach ($paymentMethods as $payment_method) {?>

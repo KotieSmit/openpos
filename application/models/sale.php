@@ -71,16 +71,18 @@ class Sale extends Model
 			$this->db->insert('sales_payments',$sales_payments_data);
 		}
 
-        foreach($change as $payment_id=>$value){
-            $sales_payments_data = array
-            (
-                'sale_id'=>$sale_id,
-                'payment_type'=>$value['payment_type'],
-                'payment_amount'=>$value['payment_amount'],
-                'fk_reason'=>$value['fk_reason']
-            );
-            $this->db->insert('sales_payments',$sales_payments_data);
-         }
+        if (is_array($change)){
+            foreach($change as $payment_id=>$value){
+                $sales_payments_data = array
+                (
+                    'sale_id'=>$sale_id,
+                    'payment_type'=>$value['payment_type'],
+                    'payment_amount'=>$value['payment_amount'],
+                    'fk_reason'=>$value['fk_reason']
+                );
+                $this->db->insert('sales_payments',$sales_payments_data);
+             }
+        }
 
 		foreach($items as $line=>$item)
 		{

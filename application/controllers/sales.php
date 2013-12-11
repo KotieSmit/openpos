@@ -224,6 +224,10 @@ class Sales extends Secure_area
                 $data['change'] = $this->sale_lib->get_change();
 //                $data['payments'] = $this->sale_lib->get_change();
             }
+        else
+        {
+            $data['change'] = 0;
+        }
         $data['payments']=$this->sale_lib->get_payments();
         $data['amount_change']=to_currency($data['amount_change'] * -1);
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name;

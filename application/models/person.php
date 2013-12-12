@@ -7,7 +7,6 @@ class Person extends Model
 		$this->db->from('people');	
 		$this->db->where('people.person_id',$person_id);
 		$query = $this->db->get();
-		
 		return ($query->num_rows()==1);
 	}
 	

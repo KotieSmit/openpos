@@ -25,7 +25,7 @@ class Sale extends Model
 		return $success;
 	}
 	
-	function save ($items,$customer_id,$employee_id,$comment,$payments,$sale_id=false, $change)
+	function save   ($items,$customer_id,$employee_id,$comment,$payments,$sale_id=false, $change)
 	{
 		if(count($items)==0)
 			return -1;
@@ -43,7 +43,8 @@ class Sale extends Model
 			'customer_id'=> $this->Customer->exists($customer_id) ? $customer_id : null,
 			'employee_id'=>$employee_id,
 			'payment_type'=>$payment_types,
-			'comment'=>$comment
+			'comment'=>$comment,
+            'cashup_id' => $this->session->userdata['cashup_id']
 		);
 
 		//Run these queries as a transaction, we want to make sure we do all or nothing
@@ -66,7 +67,8 @@ class Sale extends Model
 				'sale_id'=>$sale_id,
 				'payment_type'=>$payment['payment_type'],
 				'payment_amount'=>$payment['payment_amount'],
-                'fk_reason'=>$payment['fk_reason']
+                'fk_reason'=>$payment['fk_reason'],
+                'cashup_id' => $this->session->userdata['cashup_id']
 			);
 			$this->db->insert('sales_payments',$sales_payments_data);
 		}
@@ -78,7 +80,9 @@ class Sale extends Model
                     'sale_id'=>$sale_id,
                     'payment_type'=>$value['payment_type'],
                     'payment_amount'=>$value['payment_amount'],
-                    'fk_reason'=>$value['fk_reason']
+                    'fk_reason'=>$value['fk_reason'],
+                'cashup_id' => $this->session->userdata['cashup_id']
+
                 );
                 $this->db->insert('sales_payments',$sales_payments_data);
              }

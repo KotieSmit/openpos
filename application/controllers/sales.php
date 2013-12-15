@@ -231,8 +231,7 @@ class Sales extends Secure_area
         $data['payments']=$this->sale_lib->get_payments();
         $data['amount_change']=to_currency($data['amount_change'] * -1);
 		$data['employee']=$emp_info->first_name.' '.$emp_info->last_name;
-
-		if($customer_id!=-1)
+        if($customer_id!=-1)
 		{
 			$cust_info=$this->Customer->get_info($customer_id);
 			$data['customer']=$cust_info->first_name.' '.$cust_info->last_name;

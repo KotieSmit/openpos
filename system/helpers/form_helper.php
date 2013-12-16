@@ -153,8 +153,7 @@ if ( ! function_exists('form_input'))
 {
 	function form_input($data = '', $value = '', $extra = '')
 	{
-		$defaults = array('type' => 'text', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
-
+		$defaults = array('type' => 'text', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value, 'data-selenium' => $data);
 		return "<input "._parse_form_attributes($data, $defaults).$extra." />";
 	}
 }
@@ -180,7 +179,7 @@ if ( ! function_exists('form_password'))
 		{
 			$data = array('name' => $data);
 		}
-
+        $data['data-selenium'] = 'password';
 		$data['type'] = 'password';
 		return form_input($data, $value, $extra);
 	}
@@ -424,7 +423,7 @@ if ( ! function_exists('form_submit'))
 {	
 	function form_submit($data = '', $value = '', $extra = '')
 	{
-		$defaults = array('type' => 'submit', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
+		$defaults = array('type' => 'submit', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value, 'data-selenium' => 'submit');
         $result = "<input "._parse_form_attributes($data, $defaults).$extra." />";
 		return $result;
 	}
@@ -508,7 +507,7 @@ if ( ! function_exists('form_label'))
 				$label .= ' '.$key.'="'.$val.'"';
 			}
 		}
-
+        if (!isset($attributes['data-selenium'])) {$label .= ' data-selenium='.$label_text;}
 		$label .= ">$label_text</label>";
 
 		return $label;

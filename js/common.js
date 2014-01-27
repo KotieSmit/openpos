@@ -57,6 +57,7 @@ function hide2ndTax()
     });
 }
 
+
 //keylisteners
 
 $(window).jkey('f1',function(){

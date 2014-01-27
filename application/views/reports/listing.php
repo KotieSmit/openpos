@@ -1,6 +1,8 @@
 
 <?php $this->load->view("partial/header"); ?>
-<div id="page_title" style="margin-bottom:8px;"><?php echo $this->lang->line('reports_reports'); ?></div>
+<div id="title_bar">
+    <div id="title" style="margin-bottom:8px;"><?php echo $this->lang->line('reports_reports'); ?></div>
+</div>
 <div id="welcome_message"><?php echo $this->lang->line('reports_welcome_message'); ?>
 <ul id="report_list">
 	<li><h3><?php echo $this->lang->line('reports_graphical_reports'); ?></h3>

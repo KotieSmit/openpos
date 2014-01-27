@@ -45,7 +45,7 @@ html {
 			foreach($allowed_modules->result() as $module)
 			{
 			?>
-			<div class="menu_item">
+			<div class="menu_item" data-selenium="<?php echo  "header_" . str_replace(" ", "_", strtolower($this->lang->line("module_".$module->module_id))) ?>">
 				<a href="<?php echo site_url("$module->module_id");?>">
 				<img src="<?php echo base_url().'images/menubar/'.$module->module_id.'_menu.png';?>" border="0" alt="Menubar Image" /></a><br />
 				<a href="<?php echo site_url("$module->module_id");?>"><?php echo $this->lang->line("module_".$module->module_id) ?></a>
@@ -57,7 +57,7 @@ html {
 
 		<div id="menubar_footer">
 		<?php echo $this->lang->line('common_welcome')." $user_info->first_name $user_info->last_name! | "; ?>
-		<?php echo anchor("home/logout",$this->lang->line("common_logout")); ?>
+		<?php echo anchor("home/logout",$this->lang->line("common_logout"), "data-selenium=logout"); ?>
 		</div>
 
 		<div id="menubar_date">

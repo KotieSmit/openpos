@@ -22,7 +22,7 @@
             echo form_password('password');
             echo form_fieldset_close();
             echo "<footer>";
-            echo form_submit('loginButton','Log In',array('class'=>'btnLogin'));
+            echo form_submit('loginButton','Log In','class="btnLogin"');
             echo "</footer>";
         echo form_close();
     ?>

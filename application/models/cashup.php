@@ -6,13 +6,13 @@
   */
 
 class Cashup  extends Model{
+
     function get_full_cashup_info($cashup_id){
-        $cashup_id=1;
         $cashup_data = array();
         $cashup_data['employee_list'] = $this->get_employee_cashup_list();
         $cashup_data['cashup_info'] = $this->get_cashup_info($cashup_id);
-        $cashup_data['sales_payments'] = $this->get_payment_totals_by_cashup_id($cashup_id);
-        $cashup_data['payment_methods'] = $this->Payment_methods->get_all();
+        $cashup_data['sales_payments'] = $this->get_all_payment_methods_and_totals($cashup_id);
+//        $cashup_data['payment_methods'] = $this->Payment_methods->get_all();
         return $cashup_data;
     }
 
@@ -32,9 +32,22 @@ class Cashup  extends Model{
     }
 
     function get_all_payment_methods_and_totals($cashup_id){
-        $payment_totals= get_payment_totals_by_cashup_id($cashup_id);
+        $payment_totals= $this->get_payment_totals_by_cashup_id($cashup_id);
         $payment_methods = $this->Payment_methods->get_all();
 
+        $payments = array();
+        foreach ($payment_methods as $payment_method) {
+            foreach ($payment_totals as $payment_total) {
+                if ($payment_method['Name'] == $payment_total['payment_type']) {
+                    $payments[$payment_method['Name']] = array('name' => $payment_method['Name'], 'total' => $payment_total['payment_amount']);
+                } else {
+                    $payments[$payment_method['Name']] = array('name' => $payment_method['Name'], 'total' => 0);
+                }
+            }
+        }
+        unset($payment_totals);
+        unset($payment_methods);
+        return $payments;
     }
 
     /** Get list of employees with open/active cashups */

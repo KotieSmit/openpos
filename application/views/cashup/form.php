@@ -1,5 +1,7 @@
 <?php $this->load->view("partial/header"); ?>
-<div id="page_title"><?php echo $this->lang->line('module_cashup'); ?></div>
+<div id="title_bar">
+    <div id="title" style="margin-bottom:8px;"><?php echo $this->lang->line('module_cashups'); ?></div>
+</div>
 <?php
 //echo form_open('config/save/', array('id' => 'config_form'));
 ?>
@@ -24,7 +26,8 @@
 
     <p>&nbsp;</p>
     <a>
-        <table id="table_payment_capture" align="left" border="0" cellpadding="1" cellspacing="1" style="width: 500px; text-align: left; " >
+        <table id="table_payment_capture" align="left" border="0" cellpadding="1" cellspacing="1"
+               style="width: 500px; text-align: left; ">
             <caption>Capture</caption>
             <thead>
             <tr>
@@ -36,24 +39,36 @@
             </thead>
             <tbody>
 
-            <?php foreach ($payment_methods as $payment_method) { ?>
+            <?php
+            $i = 0;
+
+            foreach ($sales_payments as $sales_payments) {
+                ?>
                 <tr>
 
                     <td>
-                        <?php echo $payment_method['Name']; ?>&nbsp;
+                        <?php echo $sales_payments['name']; ?>&nbsp;
                     </td>
 
                     <td>
-                        <input class="calc" type="number" step="any" maxlength="10"
-                               name="input_"<?php $payment_method['Name'] ?> type="text">&nbsp;
+                        <input id="declared_line_total_<?php echo $i ?>" class="calc" type="number" step="any"
+                               maxlength="10"
+                               name="input_<?php $sales_payments['name'] ?>" type="text">&nbsp;
                     </td>
 
+                    <td id="recorded_line_total_<?php echo $i ?>"
+                        value="<?php $recorded_line_total = trim(number_format($sales_payments['total'], 2));
+                        echo $recorded_line_total ?>"><?php echo $recorded_line_total ?></td>
+
                     <td>
+                        <label id="line_total_<?php echo $i ?>" class="line_total_<?php echo $i ?>"></label>
                         &nbsp;
                     </td>
 
                 </tr>
-            <?php } ?>
+                <?php
+                $i += 1;
+            }?>
             <tr>
                 <td>TOTAL:</td>
                 <td id="total_result"></td>
@@ -70,15 +85,36 @@
         $(document).ready(function () {
             $('.calc').change(function () {
                 var total = 0;
+                var line_varience = 0;
+                var count = 0;
                 $('.calc').each(function () {
-                    if ($(this).val() !== '') {
-                        total += parseFloat($(this).val());
+                        line_varience = 0;
+                        if ($(this).val() !== '') {
+                            total += parseFloat($(this).val());
+                            line_varience = parseFloat($(this).val()) - parseFloat($("#recorded_line_total_" + count).text());
+                            $('#line_total_' + count).html(line_varience.toFixed(2));
+//                      } else {
+//                          $('#line_total_'.count).html("0.00");
+//                          $('#line_total_0').html(total);
+                        }
+                        count +=1;
                     }
-                });
+                )
+                ;
                 $('#total_result').html(total.toFixed(2));
             });
-        })(jQuery);
+        });
 
-
+        //        $(document).ready(function () {
+        //            $('.calc').change(function () {
+        //                var total = 0;
+        //                $('.calc').each(function () {
+        //                    if ($(this).val() !== '') {
+        //                        total += parseFloat($(this).val());
+        //                    }
+        //                });
+        //                $('#total_result').html(total.toFixed(2));
+        //            });
+        //        })(jQuery);
     </script>
 

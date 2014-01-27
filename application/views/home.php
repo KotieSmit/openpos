@@ -7,7 +7,7 @@
 	{
 	?>
     <a href="<?php echo site_url("$module->module_id");?>">
-	<div class="module_item">
+	<div class="module_item" data-selenium="<?php echo  "main_" . str_replace(" ", "_", strtolower($this->lang->line("module_".$module->module_id))) ?>">
         <strong><?php echo $this->lang->line("module_".$module->module_id) ?></strong>
         <img src="<?php echo base_url().'images/menubar/'.$module->module_id.'.png';?>" border="0" alt="Menubar Image" />
         <br />

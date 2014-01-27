@@ -14,6 +14,7 @@ class Cashups extends Secure_area
 
     function index()
     {
+//        $cashup_data = $this->Cashup->get_full_cashup_info(1);
         $cashup_data = $this->Cashup->get_full_cashup_info(1);
         $this->load->view('cashup/form', $cashup_data);
     }

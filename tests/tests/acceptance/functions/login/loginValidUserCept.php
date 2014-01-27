@@ -16,4 +16,5 @@ $I->fillField(str::strSelenium('username'), 'admin');
 $I->fillField(str::strSelenium('password'), 'pointofsale');
 $I->click(str::strSelenium('submit'));
 $I->canSeeInCurrentUrl('/home');
+$I->click(str::strSelenium('logout'));
 

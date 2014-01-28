@@ -4,6 +4,15 @@ echo form_open('config/save_payment_methods/');
 ?>
 <fieldset id="item_basic_info">
     <legend><?php echo $this->lang->line("payment_method_setup"); ?></legend>
+    <div id="table_action_header">
+        <ul>
+            <li class="float_left"><span></span></li>
+            <li class="float_right"></li>
+        </ul>
+    </div>
+    <div id="table_holder">
+    <?php echo $manage_table; ?>
+    </div>
     <table border="1" width="100%" class="field_row clearfix">
         <thead>
             <th align="left">  Name  </th>

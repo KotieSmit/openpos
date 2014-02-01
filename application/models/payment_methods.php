@@ -48,6 +48,15 @@ class Payment_methods extends Model{
         return $this->db->get()->result_array();
     }
 
+    function get_all_active($limit=100)
+    {
+        $this->db->from('payment_methods');
+        $this->db->where('active', 1);
+        $this->db->order_by("name", "asc");
+        $this->db->limit($limit);
+        return $this->db->get()->result_array();
+    }
+
     function get_default_change_method(){
         $this->db->where('is_change',1);
         $this->db->select('Name');

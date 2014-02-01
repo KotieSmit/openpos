@@ -382,7 +382,7 @@ class Sales extends Secure_area
 		$data['payments_total']=$this->sale_lib->get_payments_total();
 		$data['amount_due']=$this->sale_lib->get_amount_due();
 		$data['payments']=$this->sale_lib->get_payments();
-        $data['payment_methods'] = Payment_methods::get_all();
+        $data['payment_methods'] = Payment_methods::get_all_active();
         $data['payment_options']=array();
         foreach ($data['payment_methods'] as $payment_option) {
 		    $data['payment_options'][$payment_option['Name']] =

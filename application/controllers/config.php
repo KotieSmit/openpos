@@ -73,8 +73,10 @@ class Config extends Secure_area
         return anchor($method, $title, $attributes);
     }
 
-    function paymentMethods(){
-    $data['paymentMethods'] = $this->Payment_methods->get_all();
+    function paymentMethods()
+    {
+        $data['paymentMethods'] = $this->Payment_methods->get_all();
+        $data['paymentmethods_data_table'] = get_payment_methods_manage_table($data['paymentMethods']);
         $this->load->view("config/payment_methods",$data);
     }
 

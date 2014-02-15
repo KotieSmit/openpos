@@ -388,14 +388,6 @@ class Sales extends Secure_area
 		    $data['payment_options'][$payment_option['Name']] =
                  $this->lang->line($payment_option['language_id']);
         }
-//		$data['payment_options']=array(
-//			$this->lang->line('sales_cash') => $this->lang->line('sales_cash'),
-//			$this->lang->line('sales_check') => $this->lang->line('sales_check'),
-//			$this->lang->line('sales_giftcard') => $this->lang->line('sales_giftcard'),
-//			$this->lang->line('sales_debit') => $this->lang->line('sales_debit'),
-//			$this->lang->line('sales_credit') => $this->lang->line('sales_credit')
-//		);
-
 		$customer_id=$this->sale_lib->get_customer();
 		if($customer_id!=-1)
 		{

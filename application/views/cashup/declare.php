@@ -2,12 +2,12 @@
 <div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div>
 <ul id="error_message_box"></ul>
 <?php
-echo form_open('cashup/load_cashup/'.$cashup_id,array('id'=>'declare_cashup_form'));
+echo form_open('cashups/declare_submit/');
 ?>
 <fieldset id="item_kit_info">
     <legend><?php echo $this->lang->line("cashup_declare"); ?></legend>
 
-
+    <input type="text" maxlength="10" name="cashup_id" value="<?php echo  $cashup_id ?>"</input>&nbsp;
     <div id="table_holder">
         <table id="table_payment_capture" align="left" border="0" cellpadding="1" cellspacing="1"
                style="width: 500px; text-align: left; ">
@@ -36,15 +36,15 @@ echo form_open('cashup/load_cashup/'.$cashup_id,array('id'=>'declare_cashup_form
                         <td>
                             <input id="declared_line_total_<?php echo $i ?>" class="calc" type="number" step="any"
                                    maxlength="10"
-                                   name="input_<?php echo $sales_payment['name'] ?>" type="text" </input>&nbsp;
+                                   name="payment_method_<?php echo $sales_payment['name'] ?>" type="text" </input>&nbsp;
                         </td>
 
-                        <td id="recorded_line_total_<?php echo $i ?>"
+                        <td id="reported_line_total_<?php echo $i ?>" name="reported_<?php echo $sales_payment['name'] ?>"
                             value="<?php $recorded_line_total = trim(number_format($sales_payment['total'], 2));
                             echo $recorded_line_total ?>"><?php echo $recorded_line_total ?></td>
 
                         <td>
-                            <label id="line_total_<?php echo $i ?>" class="line_total_<?php echo $i ?>"></label>
+                            <label id="line_total_<?php echo $i ?>" class="line_total_<?php echo $i ?>" name="variance_<?php echo $sales_payment['name'] ?>"></label>
                             &nbsp;
                         </td>
 
@@ -59,19 +59,20 @@ echo form_open('cashup/load_cashup/'.$cashup_id,array('id'=>'declare_cashup_form
             </tr>
             </tbody>
         </table>
+        <?php
+        echo form_submit(array(
+                'name'=>'submit',
+                'id'=>'declare_submit',
+                'value'=>$this->lang->line('common_submit'),
+                'class'=>'submit_button float_right')
+        );
+        ?>
     </div>
 
 
 
 
-    <?php
-    echo form_submit(array(
-            'name'=>'submit',
-            'id'=>'submit',
-            'value'=>$this->lang->line('common_submit'),
-            'class'=>'submit_button float_right')
-    );
-    ?>
+
 </fieldset>
 <?php
 echo form_close();
@@ -87,7 +88,7 @@ echo form_close();
                     line_varience = 0;
                     if ($(this).val() !== '') {
                         total += parseFloat($(this).val());
-                        line_varience = parseFloat($(this).val()) - parseFloat($("#recorded_line_total_" + count).text());
+                        line_varience = parseFloat($(this).val()) - parseFloat($("#reported_line_total_" + count).text());
                         $('#line_total_' + count).html(line_varience.toFixed(2));
                     }
                     count += 1;

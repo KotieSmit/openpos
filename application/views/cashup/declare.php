@@ -7,7 +7,7 @@ echo form_open('cashups/declare_submit/');
 <fieldset id="item_kit_info">
     <legend><?php echo $this->lang->line("cashup_declare"); ?></legend>
 
-    <input type="text" maxlength="10" name="cashup_id" value="<?php echo  $cashup_id ?>"</input>&nbsp;
+    <input type="text" maxlength="10" name="cashup_id" style="display:none" value="<?php echo  $cashup_id ?>"</input>&nbsp;
     <div id="table_holder">
         <table id="table_payment_capture" align="left" border="0" cellpadding="1" cellspacing="1"
                style="width: 500px; text-align: left; ">
@@ -40,7 +40,7 @@ echo form_open('cashups/declare_submit/');
                         </td>
 
                         <td id="reported_line_total_<?php echo $i ?>" name="reported_<?php echo $sales_payment['name'] ?>"
-                            value="<?php $recorded_line_total = trim(number_format($sales_payment['total'], 2));
+                            value="<?php $recorded_line_total = trim(number_format($sales_payment['reported_total'], 2));
                             echo $recorded_line_total ?>"><?php echo $recorded_line_total ?></td>
 
                         <td>

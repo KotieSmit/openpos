@@ -36,13 +36,7 @@ class Cashup  extends Model{
                         inner join
                     openpos_sales_payments ON tbl.cashup_id = openpos_sales_payments.cashup_id
                 group by tbl.cashup_id", false);
-//        $this->db->select('cashup_id');
-//        $this->db->select( 'first_name');
-//        $this->db->select('last_name');
-//        $this->db->from('cashups');
-//        $this->db->join('people', 'cashups.employee_id = people.person_id','left');
-//        $this->db->where('cashups.closed IS NULL');
-//        $this->db->group_by('cashups.cashup_id');
+
 		return $this->db->get();
     }
 
@@ -75,13 +69,14 @@ class Cashup  extends Model{
         $payments = array();
         foreach ($payment_methods as $payment_method) {
             foreach ($payment_totals as $payment_total) {
-                $payments[$payment_method['Name']] = array('name' => $payment_method['Name'], 'total' => 0);
+                $payments[$payment_method['Name']] = array('name' => $payment_method['Name'], 'reported_total' => 0);
                 if ($payment_method['Name'] == $payment_total['payment_type']) {
-                    $payments[$payment_method['Name']] = array('name' => $payment_method['Name'], 'total' => $payment_total['payment_amount']);
+                    $payments[$payment_method['Name']] = array('name' => $payment_method['Name'], 'reported_total' => $payment_total['payment_amount']);
                     break;
                 }
             }
         }
+
         unset($payment_totals);
         unset($payment_methods);
         return $payments;
@@ -107,7 +102,7 @@ class Cashup  extends Model{
     function get_active_cashup_id_by_employee_id($employee_id){
         $this->db->from('cashups');
 		$this->db->where('employee_id',$employee_id);
-
+        $this->db->where('`closed`');
         $query = $this->db->get();
         if($query->num_rows()==1)
         {
@@ -144,6 +139,32 @@ class Cashup  extends Model{
     }
 
 
+    function saveCashup($data){
+        $this->db->trans_start();
+        $result = false ;
+        foreach($data['payment_methods'] as $payment_method){
+            if(!$this->db->insert('cashups_declared',$payment_method)){return false;}
+        }
 
+        $this->db->where('cashup_id', $data['cashup_id']);
+        if (!$this->db->update('cashups',array('closed'=>date("Y-m-d H:i:s")))){return false;};
+        $result = $this->db->trans_complete();
+        return $result;
+    }
+
+    	/*
+	Inserts or updates a cashup
+	*/
+	function set_new_active_cashup($employee_id)
+    {
+        $data = array('employee_id'=>$employee_id, 'started'=>date("Y-m-d H:i:s"));
+
+        if($this->db->insert('cashups',$data))
+        {
+            $item_data['item_id']=$this->db->insert_id();
+            return $this->get_active_cashup_id_by_employee_id($employee_id);
+        }
+        return false;
+    }
 
 }

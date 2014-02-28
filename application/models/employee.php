@@ -276,7 +276,7 @@ class Employee extends Person
 		{
 			$row=$query->row();
 			$this->session->set_userdata('person_id', $row->person_id);
-            $this->session->set_userdata('cashup_id', $this->Cashup->get_active_cashup_id_by_employee_id($row->person_id));
+//            $this->session->set_userdata('cashup_id', $this->Cashup->get_active_cashup_id_by_employee_id($row->person_id));
 			return true;
 		}
 		return false;

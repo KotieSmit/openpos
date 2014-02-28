@@ -94,5 +94,14 @@ class Payment_methods extends Model{
         return true;
     }
 
+    function getPayment_method_ID_By_Name($name){
+        $this->db->select('payment_method_id');
+        $this->db->from('payment_methods');
+        $this->db->where('name', $name);
+        $this->db->limit(1);
+        $result = $this->db->get()->result_array();
+        return $result[0]['payment_method_id'];
+    }
+
 }
 ?>

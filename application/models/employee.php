@@ -78,6 +78,14 @@ class Employee extends Person
 		$this->db->order_by("last_name", "asc");
 		return $this->db->get();		
 	}
+
+    function get_employee_id_by_username($username){
+        $this->db->from('employees');
+		$this->db->join('people', 'people.person_id = employees.person_id');
+		$this->db->where('employees.username',$username);
+		$this->db->order_by("last_name", "asc");
+		return $this->db->get();
+    }
 	
 	/*
 	Inserts or updates an employee
@@ -268,7 +276,7 @@ class Employee extends Person
 		{
 			$row=$query->row();
 			$this->session->set_userdata('person_id', $row->person_id);
-            $this->session->set_userdata('cashup_id', $this->Cashup->get_active_cashup_id_by_employee($row->person_id));
+//            $this->session->set_userdata('cashup_id', $this->Cashup->get_active_cashup_id_by_employee_id($row->person_id));
 			return true;
 		}
 		return false;

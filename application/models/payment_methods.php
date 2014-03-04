@@ -48,6 +48,15 @@ class Payment_methods extends Model{
         return $this->db->get()->result_array();
     }
 
+    function get_all_active($limit=100)
+    {
+        $this->db->from('payment_methods');
+        $this->db->where('active', 1);
+        $this->db->order_by("name", "asc");
+        $this->db->limit($limit);
+        return $this->db->get()->result_array();
+    }
+
     function get_default_change_method(){
         $this->db->where('is_change',1);
         $this->db->select('Name');
@@ -83,6 +92,15 @@ class Payment_methods extends Model{
         }
 
         return true;
+    }
+
+    function getPayment_method_ID_By_Name($name){
+        $this->db->select('payment_method_id');
+        $this->db->from('payment_methods');
+        $this->db->where('name', $name);
+        $this->db->limit(1);
+        $result = $this->db->get()->result_array();
+        return $result[0]['payment_method_id'];
     }
 
 }

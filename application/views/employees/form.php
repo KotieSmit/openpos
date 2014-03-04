@@ -22,7 +22,7 @@ echo form_open('employees/save/'.$person_info->person_id,array('id'=>'employee_f
 
 <?php
 $password_label_attributes = $person_info->person_id == "" ? array('class'=>'required'):array();
-?>
+?>title
 
 <div class="field_row clearfix">	
 <?php echo form_label($this->lang->line('employees_password').':', 'password',$password_label_attributes); ?>
@@ -117,7 +117,7 @@ $(document).ready(function()
 				<?php
 				}
 				?>
-				minlength: 8
+				minlength: 4
 			},	
 			repeat_password:
 			{

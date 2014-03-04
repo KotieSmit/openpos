@@ -22,5 +22,4 @@ $lang['config_print_after_sale']='Print receipt after sale';
 $lang['config_language'] = 'Language';
 $lang['config_timezone'] = 'Timezone';
 $lang['config_currency_symbol'] = 'Currency Symbol';
-
 ?>

@@ -11,6 +11,10 @@ class Sales extends Secure_area
 
 	function index()
 	{
+        $cashup_id = $this->Cashup->get_active_cashup_id_by_employee_id($this->session->userdata('person_id'));
+        if ($cashup_id == 0) $cashup_id = $this->Cashup->set_new_active_cashup($this->session->userdata('person_id'));
+        if ($cashup_id == false) redirect('/home', 'refresh');
+        $this->session->set_userdata('cashup_id', $cashup_id);
 		$this->_reload();
 	}
 
@@ -196,12 +200,6 @@ class Sales extends Secure_area
 		$this->_reload();
 	}
 
-//    function get_default_change_method(){
-//        foreach ($this->Payment_methods as $method){
-//
-//        }
-//    }
-
 	function complete()
 	{
 		$data['cart']=$this->sale_lib->get_cart();
@@ -222,7 +220,6 @@ class Sales extends Secure_area
                 $change_method = $this->Payment_methods->get_default_change_method();
                 !$this->sale_lib->add_change($change_method['Name'] , $data['amount_change'], PAYMENT_REASON_CHANGE);
                 $data['change'] = $this->sale_lib->get_change();
-//                $data['payments'] = $this->sale_lib->get_change();
             }
         else
         {
@@ -369,6 +366,7 @@ class Sales extends Secure_area
 	function _reload($data=array())
 	{
 		$person_info = $this->Employee->get_logged_in_employee_info();
+        $data['cashup_id'] = $this->session->userdata('cashup_id');
         $data['use_vat'] = USE_VAT;
 		$data['cart']=$this->sale_lib->get_cart();
 		$data['modes']=array('sale'=>$this->lang->line('sales_sale'),'return'=>$this->lang->line('sales_return'));
@@ -382,20 +380,12 @@ class Sales extends Secure_area
 		$data['payments_total']=$this->sale_lib->get_payments_total();
 		$data['amount_due']=$this->sale_lib->get_amount_due();
 		$data['payments']=$this->sale_lib->get_payments();
-        $data['payment_methods'] = Payment_methods::get_all();
+        $data['payment_methods'] = Payment_methods::get_all_active();
         $data['payment_options']=array();
         foreach ($data['payment_methods'] as $payment_option) {
 		    $data['payment_options'][$payment_option['Name']] =
                  $this->lang->line($payment_option['language_id']);
         }
-//		$data['payment_options']=array(
-//			$this->lang->line('sales_cash') => $this->lang->line('sales_cash'),
-//			$this->lang->line('sales_check') => $this->lang->line('sales_check'),
-//			$this->lang->line('sales_giftcard') => $this->lang->line('sales_giftcard'),
-//			$this->lang->line('sales_debit') => $this->lang->line('sales_debit'),
-//			$this->lang->line('sales_credit') => $this->lang->line('sales_credit')
-//		);
-
 		$customer_id=$this->sale_lib->get_customer();
 		if($customer_id!=-1)
 		{

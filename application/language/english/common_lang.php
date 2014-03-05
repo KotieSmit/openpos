@@ -38,4 +38,5 @@ $lang['common_price']='Price';
 $lang['common_welcome_message']= 'Welcome, click a module below to get started!';
 $lang['common_inv']='inv';
 $lang['common_det']='details';
+$lang['common_select']='select';
 ?>

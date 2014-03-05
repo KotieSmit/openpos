@@ -428,7 +428,7 @@ class Sale_lib
 		}
 		foreach($this->CI->Sale_suspended->get_sale_payments($sale_id)->result() as $row)
 		{
-			$this->add_payment($row->payment_type,$row->payment_amount);
+			$this->add_payment($row->payment_type,$row->payment_amount, $row->fk_reason);
 		}
 		$this->set_customer($this->CI->Sale_suspended->get_customer($sale_id)->person_id);
 		$this->set_comment($this->CI->Sale_suspended->get_comment($sale_id));

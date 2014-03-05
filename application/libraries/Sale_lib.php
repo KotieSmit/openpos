@@ -139,6 +139,7 @@ class Sale_lib
 	function delete_payment($payment_id)
 	{
 		$payments=$this->get_payments();
+        $payment_id = str_replace('%20', ' ',$payment_id);
 		unset($payments[$payment_id]);
 		$this->set_payments($payments);
 	}

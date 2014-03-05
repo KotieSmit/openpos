@@ -52,7 +52,7 @@ class Cashups extends Secure_area
         foreach ($data as $key=>$data_item){
             if (substr($key, 0, 15) == 'payment_method_'){
                 if ($data_item == '')  $data_item = '0';
-                $declare_data['payment_methods'][substr($key,15)]['declared_value'] = $data_item;
+                $declare_data['payment_methods'][str_replace('_', ' ',substr($key,15))]['declared_value'] = $data_item;
             }
         }
         return $declare_data;

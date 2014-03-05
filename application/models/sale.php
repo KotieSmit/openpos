@@ -54,18 +54,21 @@ class Sale extends Model
 
 		foreach($payments as $payment_id=>$payment)
 		{
+            $payment_type = $payment['payment_type'];
 			if ( substr( $payment['payment_type'], 0, strlen( $this->lang->line('sales_giftcard') ) ) == $this->lang->line('sales_giftcard') )
 			{
 				/* We have a gift card and we have to deduct the used value from the total value of the card. */
 				$splitpayment = explode( ':', $payment['payment_type'] );
 				$cur_giftcard_value = $this->Giftcard->get_giftcard_value( $splitpayment[1] );
 				$this->Giftcard->update_giftcard_value( $splitpayment[1], $cur_giftcard_value - $payment['payment_amount'] );
+                $payment_type = $splitpayment[0];
 			}
+
 
 			$sales_payments_data = array
 			(
 				'sale_id'=>$sale_id,
-				'payment_type'=>$payment['payment_type'],
+				'payment_type'=>$payment_type,
 				'payment_amount'=>$payment['payment_amount'],
                 'fk_reason'=>$payment['fk_reason'],
                 'cashup_id' => $this->session->userdata['cashup_id']

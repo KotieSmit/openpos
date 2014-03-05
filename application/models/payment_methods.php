@@ -18,6 +18,9 @@ class Payment_methods extends Model{
 
     function get_info($payment_method_name)
     {
+        if (strpos($payment_method_name, ":") > 0) {
+            $payment_method_name = substr($payment_method_name, 0, strpos($payment_method_name, ":"));
+        }
         $query = $this->db->get_where('payment_methods', array('name' => $payment_method_name), 1);
 
         if($query->num_rows()==1)

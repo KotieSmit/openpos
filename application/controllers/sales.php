@@ -87,14 +87,17 @@ class Sales extends Secure_area
 			}
 			elseif ( ( $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) - $this->sale_lib->get_total() ) > 0 )
 			{
-				$data['warning']='Giftcard balance is '.to_currency( $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) - $this->sale_lib->get_total() ).' !';
+				$data['warning']='Giftcard balance is '.to_currency( $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) - ($this->sale_lib->get_total() - $this->sale_lib->get_payments_total()) ).' !';
 			}
-			$payment_amount=min( $this->sale_lib->get_total(), $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) );
+			$payment_amount=min( $this->sale_lib->get_total() - $this->sale_lib->get_payments_total(), $this->Giftcard->get_giftcard_value( $this->input->post('amount_tendered') ) );
 		}
 		else
 		{
 			$payment_amount=$this->input->post('amount_tendered');
 		}
+//        if (strpos($payment_type, ":") > 0) {
+//            $payment_type = substr($payment_type, 0, strpos($payment_type, ":"));
+//        }
 		$payment_method_info = $this->Payment_methods->get_info($payment_type);
         $total = $this->sale_lib->get_amount_due();
         if ($total < $this->input->post('amount_tendered'))

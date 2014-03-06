@@ -32,6 +32,7 @@ class Config extends Secure_area
 		'language'=>$this->input->post('language'),
 		'timezone'=>$this->input->post('timezone'),
 		'print_after_sale'=>$this->input->post('print_after_sale'),
+        'page_width'=>$this->input->post('page_width'),
 		);
 		
 		if($_SERVER['HTTP_HOST'] !='ospos.pappastech.com' && $this->Appconfig->batch_save($batch_save_data))

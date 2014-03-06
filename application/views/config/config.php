@@ -225,20 +225,20 @@ echo form_open('config/save/', array('id' => 'config_form'));
 
         <?php echo form_radio(
             array(
-                'name' => 'page_size',
-                'id' => 'page_size'),
-             'page_size',
-            TRUE,
+                'name' => 'page_width',
+                'id' => 'page_width'),
+            'a4',
+            ($this->config->item('page_width') == 'a4' ? TRUE : FALSE) ,
             ''
         );
         echo $this->lang->line('config_page_width_a4') ?>
     <br>
         <?php echo form_radio(
             array(
-                'name' => 'page_size',
-                'id' => 'page_size'),
-            'page_size',
-            TRUE,
+                'name' => 'page_width',
+                'id' => 'page_width'),
+            'receipt',
+            ($this->config->item('page_width') == 'receipt' ? TRUE : FALSE) ,
             ''
         );
         echo $this->lang->line('config_page_width_receipt')?>

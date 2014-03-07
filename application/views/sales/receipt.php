@@ -28,11 +28,11 @@ if (isset($error_message))
 
 	<table id="receipt_items">
 	<tr>
-	<th style="width:25%;"><?php echo $this->lang->line('sales_item_number'); ?></th>
-	<th style="width:25%;"><?php echo $this->lang->line('items_item'); ?></th>
-	<th style="width:17%;"><?php echo $this->lang->line('common_price'); ?></th>
-	<th style="width:16%;text-align:center;"><?php echo $this->lang->line('sales_quantity'); ?></th>
-	<th style="width:16%;text-align:center;"><?php echo $this->lang->line('sales_discount'); ?></th>
+<!--	<th style="width:25%;">--><?php //echo $this->lang->line('sales_item_number'); ?><!--</th>-->
+	<th style="width:66%;"><?php echo $this->lang->line('items_item'); ?></th>
+<!--	<th style="width:17%;">--><?php //echo $this->lang->line('common_price'); ?><!--</th>-->
+	<th style="width:17%;text-align:center;"><?php echo $this->lang->line('sales_quantity'); ?></th>
+<!--	<th style="width:16%;text-align:center;">--><?php //echo $this->lang->line('sales_discount'); ?><!--</th>-->
 	<th style="width:17%;text-align:right;"><?php echo $this->lang->line('sales_total'); ?></th>
 	</tr>
 	<?php
@@ -40,16 +40,16 @@ if (isset($error_message))
 	{
 	?>
 		<tr>
-		<td><?php echo $item['item_number']; ?></td>
+<!--		<td>--><?php //echo $item['item_number']; ?><!--</td>-->
 		<td><span class='long_name'><?php echo $item['name']; ?></span><span class='short_name'><?php echo character_limiter($item['name'],10); ?></span></td>
-		<td><?php echo to_currency($item['price']); ?></td>
+<!--		<td>--><?php //echo to_currency($item['price']); ?><!--</td>-->
 		<td style='text-align:center;'><?php echo $item['quantity']; ?></td>
-		<td style='text-align:center;'><?php echo $item['discount']; ?></td>
+<!--		<td style='text-align:center;'>--><?php //echo $item['discount']; ?><!--</td>-->
 		<td style='text-align:right;'><?php echo to_currency($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100); ?></td>
 		</tr>
 
 	    <tr>
-	    <td colspan="2" align="center"><?php echo $item['description']; ?></td>
+<!--	    <td colspan="2" align="center">--><?php //echo $item['description']; ?><!--</td>-->
 		<td colspan="2" ><?php echo $item['serialnumber']; ?></td>
 		<td colspan="2"><?php echo '&nbsp;'; ?></td>
 	    </tr>

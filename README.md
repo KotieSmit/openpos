@@ -33,4 +33,6 @@ Changes:
     * Active
     * Over tender allowed
     * Tender given out as change
+- Added cashups.  Can manage outstanding monies by employee.
+-
 

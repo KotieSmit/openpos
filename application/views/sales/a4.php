@@ -32,7 +32,7 @@ if (isset($error_message))
 	<th style="width:25%;"><?php echo $this->lang->line('items_item'); ?></th>
 	<th style="width:17%;"><?php echo $this->lang->line('common_price'); ?></th>
 	<th style="width:16%;text-align:center;"><?php echo $this->lang->line('sales_quantity'); ?></th>
-	<th style="width:12%;text-align:center;"><?php echo $this->lang->line('sales_discount'); ?></th>
+	<th style="width:1%;text-align:center;"><?php echo $this->lang->line('sales_discount'); ?></th>
 	<th style="text-align:right;"><?php echo $this->lang->line('sales_total'); ?></th>
 	</tr>
 	<?php

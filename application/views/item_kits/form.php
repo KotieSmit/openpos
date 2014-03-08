@@ -1,7 +1,7 @@
 <div id="required_fields_message"><?php echo $this->lang->line('common_fields_required_message'); ?></div>
 <ul id="error_message_box"></ul>
 <?php
-echo form_open('cashup/save/'.$item_kit_info->item_kit_id,array('id'=>'item_kit_form'));
+echo form_open('item_kits/save/'.$item_kit_info->item_kit_id,array('id'=>'item_kit_form'));
 ?>
 <fieldset id="item_kit_info">
 <legend><?php echo $this->lang->line("item_kits_info"); ?></legend>

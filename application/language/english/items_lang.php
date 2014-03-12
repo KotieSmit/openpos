@@ -76,4 +76,5 @@ $lang['items_use_inventory_menu'] = 'Use Inv. Menu';
 $lang['items_manually_editing_of_quantity'] = 'Manual Edit of Quantity';
 $lang['items_inventory'] = 'Inventory';
 $lang['items_location'] = 'Location';
+$lang['items_bom']='Bill of materials';
 ?>

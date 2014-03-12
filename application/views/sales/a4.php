@@ -1,4 +1,3 @@
-<?php $this->load->view("partial/header"); ?>
 <?php
 if (isset($error_message))
 {

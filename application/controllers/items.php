@@ -111,6 +111,11 @@ class Items extends Secure_area implements iData_controller
 		$this->load->view("items/count_details",$data);
 	} //------------------------------------------- Ramel
 
+    function bill_of_materials($item_id){
+        $data['item_info']=$this->Item->get_info($item_id);
+		$this->load->view("items/bom",$data);
+    }
+
 	function generate_barcodes($item_ids)
 	{
 		$result = array();
@@ -164,7 +169,7 @@ class Items extends Secure_area implements iData_controller
 		'allow_alt_description'=>$this->input->post('allow_alt_description'),
 		'is_serialized'=>$this->input->post('is_serialized')
 		);
-		
+
 		$employee_id=$this->Employee->get_logged_in_employee_info()->person_id;
 		$cur_item_info = $this->Item->get_info($item_id);
 
@@ -183,7 +188,7 @@ class Items extends Secure_area implements iData_controller
 				echo json_encode(array('success'=>true,'message'=>$this->lang->line('items_successful_updating').' '.
 				$item_data['name'],'item_id'=>$item_id));
 			}
-			
+
 			$inv_data = array
 			(
 				'trans_date'=>date('Y-m-d H:i:s'),
@@ -245,6 +250,47 @@ class Items extends Secure_area implements iData_controller
 
 	}//---------------------------------------------------------------------Ramel
 
+    function save_bom($item_id=-1){
+        $bom_data = array(
+            'name'=>$this->input->post('name'),
+            'description'=>$this->input->post('description')
+        );
+
+        if($this->Item_kit->save($bom_data,$item_id))
+        {
+            //New item kit
+            if($item_id==-1)
+            {
+                echo json_encode(array('success'=>true,'message'=>$this->lang->line('item_kits_successful_adding').' '.
+                    $bom_data['name'],'item_kit_id'=>$bom_data['item_kit_id']));
+                $item_kit_id = $bom_data['item_kit_id'];
+            }
+            else //previous item
+            {
+                echo json_encode(array('success'=>true,'message'=>$this->lang->line('item_kits_successful_updating').' '.
+                    $bom_data['name'],'item_kit_id'=>$item_id));
+            }
+
+            if ($this->input->post('bom_item'))
+            {
+                $item_kit_items = array();
+                foreach($this->input->post('item_kit_item') as $item_id => $quantity)
+                {
+                    $item_kit_items[] = array(
+                        'item_id' => $item_id,
+                        'quantity' => $quantity
+                    );
+                }
+
+                $this->Item_kit_items->save($item_kit_items, $item_kit_id);
+            }
+        }
+        else//failure
+        {
+            echo json_encode(array('success'=>false,'message'=>$this->lang->line('item_kits_error_adding_updating').' '.
+                $bom_data['name'],'item_kit_id'=>-1));
+        }
+    }
 	function bulk_update()
 	{
 		$items_to_update=$this->input->post('item_ids');

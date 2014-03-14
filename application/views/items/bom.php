@@ -4,10 +4,10 @@
 echo form_open('items/save_bom/'.$item_info->item_id,array('id'=>'bom_form'));
 ?>
 <fieldset id="item_kit_info">
-<legend><?php echo $this->lang->line("item_kits_info"); ?></legend>
+<legend><?php echo $this->lang->line("items_info"); ?></legend>
 
 <div class="field_row clearfix">
-<?php echo form_label($this->lang->line('item_kits_name').':', 'name',array('class'=>'wide required')); ?>
+<?php echo form_label($this->lang->line('items_name').':', 'name',array('class'=>'wide required')); ?>
 	<div class='form_field'>
 	<?php echo form_input(array(
 		'name'=>'name',
@@ -18,7 +18,7 @@ echo form_open('items/save_bom/'.$item_info->item_id,array('id'=>'bom_form'));
 </div>
 
 <div class="field_row clearfix">
-<?php echo form_label($this->lang->line('item_kits_description').':', 'description',array('class'=>'wide')); ?>
+<?php echo form_label($this->lang->line('items_description').':', 'description',array('class'=>'wide')); ?>
 	<div class='form_field'>
 	<?php echo form_textarea(array(
 		'name'=>'description',
@@ -47,15 +47,15 @@ echo form_open('items/save_bom/'.$item_info->item_id,array('id'=>'bom_form'));
         <th><?php echo $this->lang->line('item_kits_item');?></th>
         <th><?php echo $this->lang->line('common_quantity');?></th>
 	</tr>
-	
-	<?php foreach ($this->Item_kit_items->get_info($item_info->item_id) as $item_kit_item) {?>
+    <?php $bom_items = $item_info->bom->result(); ?>
+	<?php foreach ($bom_items as $item_bom_item) {?>
 		<tr>
 			<?php
-			$item_info = $this->Item->get_info($item_kit_item['item_id']);
+			$item_info = $this->Item->get_info($item_bom_item->bom_item_id);
 			?>
 			<td><a href="#" onclick='return deleteItemKitRow(this);'>X</a></td>
 			<td><?php echo $item_info->name; ?></td>
-			<td><input class='quantity' id='item_kit_item_<?php echo $item_kit_item['item_id'] ?>' type='text' size='3' name=bom_item[<?php echo $item_kit_item['item_id'] ?>] value='<?php echo $item_kit_item['quantity'] ?>'/></td>
+			<td><input class='quantity' id='item_kit_item_<?php echo $item_bom_item->item_id ?>' type='text' size='3' name=bom_item[<?php echo $item_bom_item->item_id ?>] value='<?php echo $item_bom_item->quantity ?>'/></td>
 		</tr>
 	<?php } ?>
 </table>
@@ -87,7 +87,7 @@ $("#item").autocomplete('<?php echo site_url("items/item_search"); ?>',
 $("#item").result(function(event, data, formatted)
 {
 	$("#item").val("");
-	
+
 	if ($("#item_kit_item_"+data[0]).length ==1)
 	{
 		$("#item_kit_item_"+data[0]).val(parseFloat($("#item_kit_item_"+data[0]).val()) + 1);

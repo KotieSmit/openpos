@@ -65,7 +65,9 @@ class Item extends Model
 
 		if($query->num_rows()==1)
 		{
-			return $query->row();
+            $result = $query->row();
+            $result->bom = $this->get_bom_info($item_id);
+			return  $result;
 		}
 		else
 		{
@@ -83,6 +85,31 @@ class Item extends Model
 			return $item_obj;
 		}
 	}
+
+    /*
+    Gets get bill of material of item
+    */
+    function get_bom_info($item_id)
+    {
+
+        $this->db->from('item_bom');
+        $this->db->where('item_id', $item_id);
+        return $this->db->get();
+
+
+
+//        $this->db->select('*');
+//        $this->db->from('item_bom');
+//        $this->db->where('item_id', $item_id);
+//        $query = $this->db->get();
+//        if ($query->num_rows() > 0) {
+//            return $query->row();
+//        } else {
+//            return null;
+//        }
+
+
+    }
 
 	/*
 	Get an item id given an item number

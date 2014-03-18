@@ -3,8 +3,20 @@
 <?php
 echo form_open('items/save_bom/'.$item_info->item_id,array('id'=>'bom_form'));
 ?>
-<fieldset id="item_kit_info">
+<fieldset id="bom_info">
 <legend><?php echo $this->lang->line("items_info"); ?></legend>
+
+
+<div class="field_row clearfix">
+    <?php echo form_label($this->lang->line('items_name').':', 'name',array('class'=>'wide required')); ?>
+    <div class='form_field'>
+        <?php echo form_input(array(
+                'name'=>'item_id',
+                'id'=>'item_id',
+                'value'=>$item_info->item_id)
+        );?>
+    </div>
+</div>
 
 <div class="field_row clearfix">
 <?php echo form_label($this->lang->line('items_name').':', 'name',array('class'=>'wide required')); ?>
@@ -32,7 +44,7 @@ echo form_open('items/save_bom/'.$item_info->item_id,array('id'=>'bom_form'));
 
 
 <div class="field_row clearfix">
-<?php echo form_label($this->lang->line('item_kits_add_item').':', 'item',array('class'=>'wide')); ?>
+<?php echo form_label($this->lang->line('items_add_item').':', 'item',array('class'=>'wide')); ?>
 	<div class='form_field'>
 		<?php echo form_input(array(
 			'name'=>'item',
@@ -44,7 +56,7 @@ echo form_open('items/save_bom/'.$item_info->item_id,array('id'=>'bom_form'));
 <table id="item_kit_items">
 	<tr>
         <th><?php echo $this->lang->line('common_delete');?></th>
-        <th><?php echo $this->lang->line('item_kits_item');?></th>
+        <th><?php echo $this->lang->line('items_item');?></th>
         <th><?php echo $this->lang->line('common_quantity');?></th>
 	</tr>
     <?php $bom_items = $item_info->bom->result(); ?>
@@ -53,9 +65,9 @@ echo form_open('items/save_bom/'.$item_info->item_id,array('id'=>'bom_form'));
 			<?php
 			$item_info = $this->Item->get_info($item_bom_item->bom_item_id);
 			?>
-			<td><a href="#" onclick='return deleteItemKitRow(this);'>X</a></td>
+			<td><a href="#" onclick='return deleteItemBomRow(this);'>X</a></td>
 			<td><?php echo $item_info->name; ?></td>
-			<td><input class='quantity' id='item_kit_item_<?php echo $item_bom_item->item_id ?>' type='text' size='3' name=bom_item[<?php echo $item_bom_item->item_id ?>] value='<?php echo $item_bom_item->quantity ?>'/></td>
+			<td><input class='quantity' id='bom_item_<?php echo $item_bom_item->item_id ?>' type='text' size='3' name=bom_item[<?php echo $item_info->item_id ?>] value='<?php echo $item_bom_item->quantity ?>'/></td>
 		</tr>
 	<?php } ?>
 </table>
@@ -73,6 +85,18 @@ echo form_close();
 ?>
 <script type='text/javascript'>
 
+function post_bom_item_form_submit(response)
+{
+    if(!response.success)
+    {
+        set_feedback(response.message,'error_message',true);
+    }
+    else
+    {
+        set_feedback(response.message,'success_message',false);
+    }
+}
+
 $("#item").autocomplete('<?php echo site_url("items/item_search"); ?>',
 {
 	minChars:0,
@@ -88,13 +112,13 @@ $("#item").result(function(event, data, formatted)
 {
 	$("#item").val("");
 
-	if ($("#item_kit_item_"+data[0]).length ==1)
+	if ($("#bom_item"+data[0]).length ==1)
 	{
-		$("#item_kit_item_"+data[0]).val(parseFloat($("#item_kit_item_"+data[0]).val()) + 1);
+		$("#bom_item"+data[0]).val(parseFloat($("#bom_item"+data[0]).val()) + 1);
 	}
 	else
 	{
-		$("#item_kit_items").append("<tr><td><a href='#' onclick='return deleteItemKitRow(this);'>X</a></td><td>"+data[1]+"</td><td><input class='quantity' id='item_kit_item_"+data[0]+"' type='text' size='3' name=item_kit_item["+data[0]+"] value='1'/></td></tr>");
+		$("#item_kit_items").append("<tr><td><a href='#' onclick='return deleteItemKitRow(this);'>X</a></td><td>"+data[1]+"</td><td><input class='quantity' id='bom_item"+data[0]+"' type='text' size='3' name=bom_item["+data[0]+"] value='1'/></td></tr>");
 	}
 });
 
@@ -102,14 +126,14 @@ $("#item").result(function(event, data, formatted)
 //validation and submit handling
 $(document).ready(function()
 {
-	$('#item_kit_form').validate({
+	$('#bom_form').validate({
 		submitHandler:function(form)
 		{
 			$(form).ajaxSubmit({
 			success:function(response)
 			{
 				tb_remove();
-				post_item_kit_form_submit(response);
+                post_bom_item_form_submit(response);
 			},
 			dataType:'json'
 		});
@@ -130,7 +154,7 @@ $(document).ready(function()
 	});
 });
 
-function deleteItemKitRow(link)
+function deleteItemBomRow(link)
 {
 	$(link).parent().parent().remove();
 	return false;

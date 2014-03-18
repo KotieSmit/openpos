@@ -13,6 +13,19 @@ class Item extends Model
 		return ($query->num_rows()==1);
 	}
 
+    /*
+    Determines if a given item_id is an item
+    */
+    function bom_exists($item_id, $bom_item_id)
+    {
+        $this->db->from('item_bom');
+        $this->db->where('item_id',$item_id);
+        $this->db->where('bom_item_id',$bom_item_id);
+        $query = $this->db->get();
+
+        return ($query->num_rows()==1);
+    }
+
 	/*
 	Returns all the items
 	*/
@@ -159,7 +172,27 @@ class Item extends Model
 		return $this->db->update('items',$item_data);
 	}
 
-	/*
+    /*
+     * Inserts or update item BOM
+     */
+    function save_bom_items(&$item_bom_items,$item_id)
+    {
+        //Run these queries as a transaction, we want to make sure we do all or nothing
+        $this->db->trans_start();
+
+        $this->delete_bom($item_id);
+
+        foreach ($item_bom_items as $row)
+        {
+            $row['item_id'] = $item_id;
+            $this->db->insert('item_bom',$row);
+        }
+
+        $this->db->trans_complete();
+        return true;
+    }
+
+    /*
 	Updates multiple items at once
 	*/
 	function update_multiple($item_data,$item_ids)
@@ -176,6 +209,15 @@ class Item extends Model
 		$this->db->where('item_id', $item_id);
 		return $this->db->update('items', array('deleted' => 1));
 	}
+
+    /*
+    Delete bom for an item
+    */
+    function delete_bom($item_id)
+    {
+        $this->db->where('item_id', $item_id);
+        return $this->db->delete('item_bom');
+    }
 
 	/*
 	Deletes a list of items

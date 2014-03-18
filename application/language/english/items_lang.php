@@ -77,4 +77,6 @@ $lang['items_manually_editing_of_quantity'] = 'Manual Edit of Quantity';
 $lang['items_inventory'] = 'Inventory';
 $lang['items_location'] = 'Location';
 $lang['items_bom']='Bill of materials';
+$lang['items_add_item']='Add Item';
+$lang['items_Item']='Item';
 ?>

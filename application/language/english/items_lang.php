@@ -78,5 +78,8 @@ $lang['items_inventory'] = 'Inventory';
 $lang['items_location'] = 'Location';
 $lang['items_bom']='Bill of materials';
 $lang['items_add_item']='Add Item';
+$lang['items_stock_keeping_item']='Stock keeping item';
+$lang['items_cost_from_bom']='Cost from BOM';
+$lang['items_production_item']='Production item';
 $lang['items_Item']='Item';
 ?>

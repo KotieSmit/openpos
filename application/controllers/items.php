@@ -167,7 +167,10 @@ class Items extends Secure_area implements iData_controller
 		'reorder_level'=>$this->input->post('reorder_level'),
 		'location'=>$this->input->post('location'),
 		'allow_alt_description'=>$this->input->post('allow_alt_description'),
-		'is_serialized'=>$this->input->post('is_serialized')
+		'is_serialized'=>$this->input->post('is_serialized'),
+        'stock_keeping_item'=>$this->input->post('stock_keeping_item'),
+        'cost_from_bom'=>$this->input->post('cost_from_bom'),
+        'production_item'=>$this->input->post('production_item')
 		);
 
 		$employee_id=$this->Employee->get_logged_in_employee_info()->person_id;

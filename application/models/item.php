@@ -109,19 +109,6 @@ class Item extends Model
         $this->db->where('item_id', $item_id);
         return $this->db->get();
 
-
-
-//        $this->db->select('*');
-//        $this->db->from('item_bom');
-//        $this->db->where('item_id', $item_id);
-//        $query = $this->db->get();
-//        if ($query->num_rows() > 0) {
-//            return $query->row();
-//        } else {
-//            return null;
-//        }
-
-
     }
 
 	/*

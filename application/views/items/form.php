@@ -184,6 +184,42 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
 	</div>
 </div>
 
+<div class="field_row clearfix">
+    <?php echo form_label($this->lang->line('items_stock_keeping_item').':', 'is_serialized',array('class'=>'wide')); ?>
+    <div class='form_field'>
+        <?php echo form_checkbox(array(
+                'name'=>'stock_keeping_item',
+                'id'=>'stock_keeping_item',
+                'value'=>1,
+                'checked'=>($item_info->stock_keeping_item)? 1 : 0)
+        );?>
+    </div>
+</div>
+
+<div class="field_row clearfix">
+    <?php echo form_label($this->lang->line('items_cost_from_bom').':', 'is_serialized',array('class'=>'wide')); ?>
+    <div class='form_field'>
+        <?php echo form_checkbox(array(
+                'name'=>'cost_from_bom',
+                'id'=>'cost_from_bom',
+                'value'=>1,
+                'checked'=>($item_info->cost_from_bom)? 1 : 0)
+        );?>
+    </div>
+</div>
+
+<div class="field_row clearfix">
+    <?php echo form_label($this->lang->line('items_production_item').':', 'is_serialized',array('class'=>'wide')); ?>
+    <div class='form_field'>
+        <?php echo form_checkbox(array(
+                'name'=>'production_item',
+                'id'=>'production_item',
+                'value'=>1,
+                'checked'=>($item_info->production_item)? 1 : 0)
+        );?>
+    </div>
+</div>
+
 <?php
 echo form_submit(array(
 	'name'=>'submit',

@@ -245,24 +245,28 @@ class Sale_lib
 		$insertkey=$maxkey+1;
 
 		//array/cart records are identified by $insertkey and item_id is just another field.
+        $item_info = $this->CI->Item->get_info($item_id);
 		$item = array(($insertkey)=>
 		array(
 			'item_id'=>$item_id,
 			'line'=>$insertkey,
-			'name'=>$this->CI->Item->get_info($item_id)->name,
-			'item_number'=>$this->CI->Item->get_info($item_id)->item_number,
-			'description'=>$description!=null ? $description: $this->CI->Item->get_info($item_id)->description,
+			'name'=>$item_info->name,
+			'item_number'=>$item_info->item_number,
+			'description'=>$description!=null ? $description: $item_info->description,
 			'serialnumber'=>$serialnumber!=null ? $serialnumber: '',
-			'allow_alt_description'=>$this->CI->Item->get_info($item_id)->allow_alt_description,
-			'is_serialized'=>$this->CI->Item->get_info($item_id)->is_serialized,
+			'allow_alt_description'=>$item_info->allow_alt_description,
+			'is_serialized'=>$item_info->is_serialized,
 			'quantity'=>$quantity,
             'discount'=>$discount,
-			'price'=>$price!=null ? $price: $this->CI->Item->get_info($item_id)->unit_price
-			)
-		);
+			'price'=>$price!=null ? $price: $item_info->unit_price,
+            'stock_keeping_item'=>$item_info->stock_keeping_item ,
+            'production_item'=>$item_info->production_item ,
+            'cost_from_bom'=>$item_info->cost_from_bom,
+            'bom'=>$item_info->bom
+		));
 
 		//Item already exists and is not serialized, add to quantity
-		if($itemalreadyinsale && ($this->CI->Item->get_info($item_id)->is_serialized ==0) )
+		if($itemalreadyinsale && ($item_info->is_serialized ==0) )
 		{
 			$items[$updatekey]['quantity']+=$quantity;
 		}

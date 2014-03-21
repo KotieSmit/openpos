@@ -94,7 +94,6 @@ class Sale extends Model
 		foreach($items as $line=>$item)
 		{
 			$cur_item_info = $this->Item->get_info($item['item_id']);
-
 			$sales_items_data = array
 			(
 				'sale_id'=>$sale_id,
@@ -107,27 +106,29 @@ class Sale extends Model
 				'item_cost_price' => $cur_item_info->cost_price,
 				'item_unit_price'=>$item['price']
 			);
-
 			$this->db->insert('sales_items',$sales_items_data);
 
 			//Update stock quantity
-			$item_data = array('quantity'=>$cur_item_info->quantity - $item['quantity']);
-			$this->Item->save($item_data,$item['item_id']);
-			
-			//Ramel Inventory Tracking
-			//Inventory Count Details
-			$qty_buy = -$item['quantity'];
-			$sale_remarks ='POS '.$sale_id;
-			$inv_data = array
-			(
-				'trans_date'=>date('Y-m-d H:i:s'),
-				'trans_items'=>$item['item_id'],
-				'trans_user'=>$employee_id,
-				'trans_comment'=>$sale_remarks,
-				'trans_inventory'=>$qty_buy
-			);
-			$this->Inventory->insert($inv_data);
-			//------------------------------------Ramel
+            $item_info = array(
+                'item_id'=>$cur_item_info->item_id,
+                'stock_keeping_item'=>$cur_item_info->stock_keeping_item
+            );
+            $this->update_stock_quantity($item_info, $cur_item_info->quantity - $item['quantity']);
+            $this->update_stock_tracking($item, $sale_id, $employee_id);
+
+            //* Update BOM items qty and stock tracking
+            foreach ($item['bom'] as $bom_item){
+                $bom_item_info = $this->Item->get_info($bom_item->bom_item_id);
+                $bom_item = array(
+                    'item_id'=>$bom_item->bom_item_id,
+                    'stock_keeping_item'=>$bom_item_info->stock_keeping_item,
+                    'quantity'=>$bom_item->quantity,
+                    'main_item'=>$item['description']
+                );
+
+                $this->update_stock_quantity($bom_item, $bom_item_info->quantity  - $bom_item['quantity']);
+                $this->update_stock_tracking($bom_item, $sale_id, $employee_id);
+            }
 
 			$customer = $this->Customer->get_info($customer_id);
  			if ($customer_id == -1 or $customer->taxable)
@@ -153,7 +154,35 @@ class Sale extends Model
 		
 		return $sale_id;
 	}
-	
+
+    function update_stock_quantity($item, $quantity){
+        if ($item['stock_keeping_item']){
+            $item_data = array('quantity'=>$quantity);
+            $this->Item->save($item_data,$item['item_id']);
+
+        }
+    }
+
+    function update_stock_tracking($item, $sale_id, $employee_id){
+        if ($item['stock_keeping_item']){
+            //Ramel Inventory Tracking
+            //Inventory Count Details
+            $qty_buy = -$item['quantity'];
+            $sale_remarks ='POS '.$sale_id;
+            if (isset($item['main_item'])) {$sale_remarks = 'POS '.$sale_id . 'Item: ' . $item['main_item'];}
+            $inv_data = array
+            (
+                'trans_date'=>date('Y-m-d H:i:s'),
+                'trans_items'=>$item['item_id'],
+                'trans_user'=>$employee_id,
+                'trans_comment'=>$sale_remarks,
+                'trans_inventory'=>$qty_buy
+            );
+            $this->Inventory->insert($inv_data);
+            //------------------------------------Ramel
+        }
+    }
+
 	function delete($sale_id)
 	{
 		//Run these queries as a transaction, we want to make sure we do all or nothing

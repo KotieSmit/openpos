@@ -59,7 +59,7 @@ echo form_open('items/save_bom/'.$item_info->item_id,array('id'=>'bom_form'));
         <th><?php echo $this->lang->line('items_item');?></th>
         <th><?php echo $this->lang->line('common_quantity');?></th>
 	</tr>
-    <?php $bom_items = $item_info->bom->result(); ?>
+    <?php $bom_items = $item_info->bom; ?>
 	<?php foreach ($bom_items as $item_bom_item) {?>
 		<tr>
 			<?php

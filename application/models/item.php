@@ -79,7 +79,7 @@ class Item extends Model
 		if($query->num_rows()==1)
 		{
             $result = $query->row();
-            $result->bom = $this->get_bom_info($item_id);
+            $result->bom = $this->get_bom_info($item_id)->result();
 			return  $result;
 		}
 		else

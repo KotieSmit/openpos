@@ -234,10 +234,8 @@ class Sales extends Secure_area
 			$data['customer']=$cust_info->first_name.' '.$cust_info->last_name;
 		}
 
-        $items = $this->build_item_bom($data['cart']);
-
 		//SAVE sale to database
-		$data['sale_id']='POS '.$this->Sale->save($items, $customer_id,$employee_id,$comment,$data['payments'],False ,$data['change']);
+		$data['sale_id']='POS '.$this->Sale->save($data['cart'], $customer_id,$employee_id,$comment,$data['payments'],False ,$data['change']);
 		if ($data['sale_id'] == 'POS -1')
 		{
 			$data['error_message'] = $this->lang->line('sales_transaction_failed');
@@ -263,14 +261,6 @@ class Sales extends Secure_area
 
 		$this->sale_lib->clear_all();
 	}
-
-    function build_item_bom($items){
-        foreach ($items as  $key => $item) {
-            $item_bom =  $this->Item->get_bom_info($item['item_id'])->result();
-            $items[$key]['bom'] = $item_bom;
-        }
-        return $items;
-    }
 
 	function receipt($sale_id)
 	{

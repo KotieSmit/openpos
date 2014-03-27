@@ -63,11 +63,11 @@ echo form_open('items/save_bom/'.$item_info->item_id,array('id'=>'bom_form'));
 	<?php foreach ($bom_items as $item_bom_item) {?>
 		<tr>
 			<?php
-			$item_info = $this->Item->get_info($item_bom_item->bom_item_id);
+			$item_info = $this->Item->get_info($item_bom_item['bom_item_id']);
 			?>
 			<td><a href="#" onclick='return deleteItemBomRow(this);'>X</a></td>
 			<td><?php echo $item_info->name; ?></td>
-			<td><input class='quantity' id='bom_item_<?php echo $item_bom_item->item_id ?>' type='text' size='3' name=bom_item[<?php echo $item_info->item_id ?>] value='<?php echo $item_bom_item->quantity ?>'/></td>
+			<td><input class='quantity' id='bom_item_<?php echo $item_bom_item['item_id'] ?>' type='text' size='3' name=bom_item[<?php echo $item_info->item_id ?>] value='<?php echo $item_bom_item['quantity'] ?>'/></td>
 		</tr>
 	<?php } ?>
 </table>

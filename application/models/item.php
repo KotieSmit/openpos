@@ -79,7 +79,7 @@ class Item extends Model
 		if($query->num_rows()==1)
 		{
             $result = $query->row();
-            $result->bom = $this->get_bom_info($item_id)->result();
+            $result->bom = $this->get_bom_info($item_id)->result_array();
 			return  $result;
 		}
 		else
@@ -111,6 +111,13 @@ class Item extends Model
 
     }
 
+    function get_bom_item_quantity($item_id, $bom_item_id){
+        $this->db->select('sum(quantity) as quantity');
+        $this->db->from('item_bom');
+        $this->db->where('item_id', $item_id);
+        $this->db->where('bom_item_id', $bom_item_id);
+        return $this->db->get()->result_array()[0]['quantity'];
+    }
 	/*
 	Get an item id given an item number
 	*/

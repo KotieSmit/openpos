@@ -254,7 +254,7 @@ class Items extends Secure_area implements iData_controller
 	}//---------------------------------------------------------------------Ramel
 
     function save_bom($item_id=-1){
-
+        $total_bom_cost=null;
         if ($this->input->post('bom_item'))
         {
             $item_bom_items = array();
@@ -265,8 +265,9 @@ class Items extends Secure_area implements iData_controller
                     'quantity' => $quantity
                 );
             }
-
-            $result = $this->Item->save_bom_items($item_bom_items, $this->input->post('item_id'));
+            $item_info=$this->Item->get_info($this->input->post('item_id'));
+            if ($item_info->cost_from_bom) $total_bom_cost =$this->input->post('total_bom_cost');
+            $result = $this->Item->save_bom_items($item_bom_items, $this->input->post('item_id'), $total_bom_cost);
         } else {
             $item_bom_items = array();
             $result = $this->Item->save_bom_items($item_bom_items, $this->input->post('item_id'));

@@ -82,4 +82,6 @@ $lang['items_stock_keeping_item']='Stock keeping item';
 $lang['items_cost_from_bom']='Cost from BOM';
 $lang['items_production_item']='Production item';
 $lang['items_Item']='Item';
+$lang['items_cost']='Cost';
+$lang['items_bom_cost']='Material cost';
 ?>

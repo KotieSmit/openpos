@@ -104,10 +104,14 @@ class Item extends Model
     */
     function get_bom_info($item_id)
     {
+        $sql = "select *, (select cost_price from openpos_items where item_id = bom.bom_item_id) as cost from openpos_item_bom as bom where item_id = ?";
+        return $this->db->query($sql, array($item_id));
+        return $this->db->query($sql, array($item_id));
 
-        $this->db->from('item_bom');
-        $this->db->where('item_id', $item_id);
-        return $this->db->get();
+//        return $this->db->get();
+//        $this->db->from('item_bom');
+//        $this->db->where('item_id', $item_id);
+//        return $this->db->get();
 
     }
 
@@ -166,10 +170,12 @@ class Item extends Model
 		return $this->db->update('items',$item_data);
 	}
 
+
+
     /*
      * Inserts or update item BOM
      */
-    function save_bom_items(&$item_bom_items,$item_id)
+    function save_bom_items(&$item_bom_items,$item_id, $total_bom_cost=null)
     {
         //Run these queries as a transaction, we want to make sure we do all or nothing
         $this->db->trans_start();
@@ -181,10 +187,20 @@ class Item extends Model
             $row['item_id'] = $item_id;
             $this->db->insert('item_bom',$row);
         }
-
+        if (isset($total_bom_cost)) $this->update_bom_cost(array('cost_price'=>$total_bom_cost), $item_id);
         $this->db->trans_complete();
         return true;
     }
+
+    /*
+	Updates Cost price of item
+	*/
+    function update_bom_cost($item_data,$item_id)
+    {
+        $this->db->where('item_id',$item_id);
+        return $this->db->update('items',$item_data);
+    }
+
 
     /*
 	Updates multiple items at once

@@ -298,7 +298,7 @@ class Item extends Model
 		$by_name = $this->db->get();
 		foreach($by_name->result() as $row)
 		{
-			$suggestions[]=$row->item_id.'|'.$row->name;
+			$suggestions[]=$row->item_id.'|'.$row->name.'|'.$row->cost_price;
 		}
 
 		$this->db->from('items');

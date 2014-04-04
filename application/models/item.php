@@ -38,7 +38,7 @@ class Item extends Model
 		$this->db->offset($offset);
 		return $this->db->get();
 	}
-	
+
 	function count_all()
 	{
 		$this->db->from('items');
@@ -73,7 +73,7 @@ class Item extends Model
 	{
 		$this->db->from('items');
 		$this->db->where('item_id',$item_id);
-		
+
 		$query = $this->db->get();
 
 		if($query->num_rows()==1)
@@ -106,13 +106,6 @@ class Item extends Model
     {
         $sql = "select *, (select cost_price from openpos_items where item_id = bom.bom_item_id) as cost from openpos_item_bom as bom where item_id = ?";
         return $this->db->query($sql, array($item_id));
-        return $this->db->query($sql, array($item_id));
-
-//        return $this->db->get();
-//        $this->db->from('item_bom');
-//        $this->db->where('item_id', $item_id);
-//        return $this->db->get();
-
     }
 
     function get_bom_item_quantity($item_id, $bom_item_id){
@@ -122,6 +115,7 @@ class Item extends Model
         $this->db->where('bom_item_id', $bom_item_id);
         return $this->db->get()->result_array()[0]['quantity'];
     }
+
 	/*
 	Get an item id given an item number
 	*/
@@ -167,7 +161,8 @@ class Item extends Model
 		}
 
 		$this->db->where('item_id', $item_id);
-		return $this->db->update('items',$item_data);
+		$this->db->update('items',$item_data);
+        return $this->update_all_bom_cost();
 	}
 
 
@@ -188,6 +183,7 @@ class Item extends Model
             $this->db->insert('item_bom',$row);
         }
         if (isset($total_bom_cost)) $this->update_bom_cost(array('cost_price'=>$total_bom_cost), $item_id);
+        $this->update_all_bom_cost();
         $this->db->trans_complete();
         return true;
     }
@@ -201,6 +197,33 @@ class Item extends Model
         return $this->db->update('items',$item_data);
     }
 
+    /*
+     Updates cost of all BOM (Bill of material) items
+     */
+    function update_all_bom_cost(){
+        $count = 0;
+        $this->db->select('sum(cost_price) as total_cost_price');
+        $this->db->from('items');
+        $old_cost =  $this->db->get()->result_array();
+
+        $new_cost = array();
+        while ($old_cost != $new_cost){
+            $this->db->select('sum(cost_price) as total_cost_price');
+            $this->db->from('items');
+            $old_cost =  $this->db->get()->result_array();
+
+            $sql = "UPDATE openpos_items as i INNER JOIN view_item_bom_cost as vibc ON i.item_id = vibc.item_id SET i.cost_price = vibc. bom_line_cost where i.cost_from_bom = 1;";
+            $this->db->query($sql);
+
+
+            $this->db->select('sum(cost_price) as total_cost_price');
+            $this->db->from('items');
+            $new_cost =  $this->db->get()->result_array();
+            $count += 1;
+            if ($count == 20) return false;
+        }
+        return $old_cost === $new_cost;
+    }
 
     /*
 	Updates multiple items at once
@@ -344,11 +367,11 @@ class Item extends Model
 	function search($search)
 	{
 		$this->db->from('items');
-		$this->db->where("(name LIKE '%".$this->db->escape_like_str($search)."%' or 
-		item_number LIKE '%".$this->db->escape_like_str($search)."%' or 
+		$this->db->where("(name LIKE '%".$this->db->escape_like_str($search)."%' or
+		item_number LIKE '%".$this->db->escape_like_str($search)."%' or
 		category LIKE '%".$this->db->escape_like_str($search)."%') and deleted=0");
 		$this->db->order_by("name", "asc");
-		return $this->db->get();	
+		return $this->db->get();
 	}
 
 	function get_categories()

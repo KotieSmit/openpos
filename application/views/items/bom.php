@@ -147,8 +147,6 @@ echo form_close();
             var count = 0;
             $('.quantity').each(function () {count = count + 1;});
             $("#item_kit_items").append("<tr class='bom_item'><td><a href='#' onclick='return deleteItemBomRow(this);'>X</a></td><td>" + data[1] + "</td><td><input class='quantity quantity_" + count + "' id='bom_item_" + data[0] + "' type='text' size='3' name=bom_item[" + data[0] + "] onchange='calc_cost()' value='1'/></td><td class=unit_cost_" + count + " id=item_cost_" + count + " data-Unit_cost_"+count+"=" + data[2] + ">" + data[2] + "</td></tr>");
-            //		$("#item_kit_items").append("<tr><td><a href='#' onclick='return deleteItemKitRow(this);'>X</a></td><td>"+data[1]+"</td><td><input class='quantity' id='bom_item"+data[0]+"' type='text' size='3' name=bom_item["+data[0]+"] value='1'/></td><td>cost</td></tr>");
-//            $("#item_kit_items").append("<tr class='bom_item'><td><a href='#' onclick='return deleteItemKitRow(this);'>X</a></td><td>"+data[1]+"</td><td><input class='quantity quantity_"+count+ "' id='bom_item_"+data[0]+"' type='text' size='3' name=bom_item["+data[0]+"] onchange='calc_cost()' value='1'/></td><td class=unit_cost_"+count+" id=item_cost_"+data[0]+" data-Unit_cost=12.34>12.34</td></tr>");
 
             var elem = document.getElementById("bom_cost");
             elem.value = parseFloat(elem.value) + parseFloat(data[2]);

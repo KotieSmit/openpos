@@ -99,6 +99,7 @@ class Items extends Secure_area implements iData_controller
 	}
 	
 	//Ramel Inventory Tracking
+
 	function inventory($item_id=-1)
 	{
 		$data['item_info']=$this->Item->get_info($item_id);

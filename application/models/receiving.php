@@ -73,6 +73,7 @@ class Receiving extends Model
 
 			$supplier = $this->Supplier->get_info($supplier_id);
 		}
+        $this->Item->update_all_bom_cost();
 		$this->db->trans_complete();
 		
 		if ($this->db->trans_status() === FALSE)

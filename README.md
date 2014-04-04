@@ -38,4 +38,3 @@ Changes:
    * Cost from BOM (Bill of materials) or manually maintained
    * Updates stock level according to BOM setup for an item
 - Miminalised invoice for slip printing
--

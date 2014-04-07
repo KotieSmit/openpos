@@ -5,7 +5,7 @@ This project aims to create a modern look and integrate features from other comm
 
 
 MySQL User Creation
--------------------------
+---------------------track----
 CREATE USER 'openpos'@'localhost' IDENTIFIED BY  'openpos';
 GRANT USAGE ON * . * TO  'openpos'@'localhost' IDENTIFIED BY  'openpos' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
 CREATE DATABASE IF NOT EXISTS  `openpos` ;
@@ -30,9 +30,11 @@ Changes:
 - Can now set tax system to be used in the constants file:  USE_VAT true/false
 - Sales, receiving and reports have been changed to report VAT and GST
 - Payment methods are now configurable. The following can now be set:
-    * Active
-    * Over tender allowed
-    * Tender given out as change
-- Added cashups.  Can manage outstanding monies by employee.
--
-
+   * Active
+   * Over tender allowed
+   * Tender given out as change
+- Cashup per user session
+- Bill of materials:
+   * Cost from BOM (Bill of materials) or manually maintained
+   * Updates stock level according to BOM setup for an item
+- Simplified invoice for slip printing

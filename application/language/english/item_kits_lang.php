@@ -1,5 +1,6 @@
 <?php
 $lang['item_kits_name'] = 'Item Kit Name';
+$lang['item_kits_id'] = 'Barcode';
 $lang['item_kits_description'] = 'Item Kit Description';
 $lang['item_kits_no_item_kits_to_display'] = 'No item kits to display';
 $lang['item_kits_update'] = 'Update Item Kit';

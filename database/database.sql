@@ -1,11 +1,20 @@
 -- phpMyAdmin SQL Dump
--- version 3.3.9
+-- version 3.4.10.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 08, 2011 at 04:27 PM
--- Server version: 5.1.54
--- PHP Version: 5.3.3
+-- Generation Time: Apr 04, 2014 at 10:34 PM
+-- Server version: 5.5.32
+-- PHP Version: 5.4.26-1+deb.sury.org~precise+1
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `openpos`
@@ -17,11 +26,13 @@
 -- Table structure for table `openpos_app_config`
 --
 
-CREATE TABLE `openpos_app_config` (
+CREATE TABLE IF NOT EXISTS `openpos_app_config` (
   `key` varchar(255) NOT NULL,
   `value` varchar(255) NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
 -- Dumping data for table `openpos_app_config`
@@ -38,13 +49,45 @@ INSERT INTO `openpos_app_config` (`key`, `value`) VALUES
 ('timezone', 'America/New_York'),
 ('website', '');
 
+
+-- --
+
+-- Table structure for table `openpos_cashups`
+--
+
+
+
+CREATE TABLE IF NOT EXISTS `openpos_cashups` (
+  `cashup_id` int(11) NOT NULL AUTO_INCREMENT,
+  `employee_id` varchar(45) NOT NULL,
+  `started` datetime DEFAULT NULL,
+  `closed` datetime DEFAULT NULL,
+  PRIMARY KEY (`cashup_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `openpos_cashups_declared`
+--
+
+CREATE TABLE IF NOT EXISTS `openpos_cashups_declared` (
+  `openpos_cashups_payments_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cashup_id` int(11) NOT NULL,
+  `payment_method_id` int(11) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `declared_value` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `reported_total` decimal(15,2) NOT NULL DEFAULT '0.00',
+  PRIMARY KEY (`openpos_cashups_payments_id`,`cashup_id`,`payment_method_id`,`employee_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=120 ;
+
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `openpos_customers`
 --
 
-CREATE TABLE `openpos_customers` (
+CREATE TABLE IF NOT EXISTS `openpos_customers` (
   `person_id` int(10) NOT NULL,
   `account_number` varchar(255) DEFAULT NULL,
   `taxable` int(1) NOT NULL DEFAULT '1',
@@ -53,18 +96,13 @@ CREATE TABLE `openpos_customers` (
   KEY `person_id` (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `openpos_customers`
---
-
-
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `openpos_employees`
 --
 
-CREATE TABLE `openpos_employees` (
+CREATE TABLE IF NOT EXISTS `openpos_employees` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `person_id` int(10) NOT NULL,
@@ -86,14 +124,14 @@ INSERT INTO `openpos_employees` (`username`, `password`, `person_id`, `deleted`)
 -- Table structure for table `openpos_giftcards`
 --
 
-CREATE TABLE `openpos_giftcards` (
+CREATE TABLE IF NOT EXISTS `openpos_giftcards` (
   `giftcard_id` int(11) NOT NULL AUTO_INCREMENT,
   `giftcard_number` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `value` double(15,2) NOT NULL,
   `deleted` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`giftcard_id`),
   UNIQUE KEY `giftcard_number` (`giftcard_number`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=48 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `openpos_giftcards`
@@ -106,22 +144,17 @@ CREATE TABLE `openpos_giftcards` (
 -- Table structure for table `openpos_inventory`
 --
 
-CREATE TABLE `openpos_inventory` (
+CREATE TABLE IF NOT EXISTS `openpos_inventory` (
   `trans_id` int(11) NOT NULL AUTO_INCREMENT,
   `trans_items` int(11) NOT NULL DEFAULT '0',
   `trans_user` int(11) NOT NULL DEFAULT '0',
   `trans_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `trans_comment` text NOT NULL,
-  `trans_inventory` int(11) NOT NULL DEFAULT '0',
+  `trans_inventory` double(15,3) NOT NULL DEFAULT '0.000',
   PRIMARY KEY (`trans_id`),
   KEY `openpos_inventory_ibfk_1` (`trans_items`),
   KEY `openpos_inventory_ibfk_2` (`trans_user`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `openpos_inventory`
---
-
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=670 ;
 
 -- --------------------------------------------------------
 
@@ -129,7 +162,7 @@ CREATE TABLE `openpos_inventory` (
 -- Table structure for table `openpos_items`
 --
 
-CREATE TABLE `openpos_items` (
+CREATE TABLE IF NOT EXISTS `openpos_items` (
   `name` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
   `supplier_id` int(11) DEFAULT NULL,
@@ -137,22 +170,20 @@ CREATE TABLE `openpos_items` (
   `description` varchar(255) NOT NULL,
   `cost_price` double(15,2) NOT NULL,
   `unit_price` double(15,2) NOT NULL,
-  `quantity` double(15,2) NOT NULL DEFAULT '0.00',
-  `reorder_level` double(15,2) NOT NULL DEFAULT '0.00',
+  `quantity` double(15,3) NOT NULL DEFAULT '0.000',
+  `reorder_level` double(15,3) NOT NULL DEFAULT '0.000',
   `location` varchar(255) NOT NULL,
   `item_id` int(10) NOT NULL AUTO_INCREMENT,
   `allow_alt_description` tinyint(1) NOT NULL,
   `is_serialized` tinyint(1) NOT NULL,
+  `stock_keeping_item` tinyint(1) NOT NULL,
+  `production_item` tinyint(1) NOT NULL,
+  `cost_from_bom` tinyint(1) NOT NULL,
   `deleted` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`item_id`),
   UNIQUE KEY `item_number` (`item_number`),
   KEY `openpos_items_ibfk_1` (`supplier_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `openpos_items`
---
-
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
 
 -- --------------------------------------------------------
 
@@ -160,17 +191,26 @@ CREATE TABLE `openpos_items` (
 -- Table structure for table `openpos_items_taxes`
 --
 
-CREATE TABLE `openpos_items_taxes` (
+CREATE TABLE IF NOT EXISTS `openpos_items_taxes` (
   `item_id` int(10) NOT NULL,
   `name` varchar(255) NOT NULL,
   `percent` double(15,2) NOT NULL,
   PRIMARY KEY (`item_id`,`name`,`percent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `openpos_items_taxes`
+-- Table structure for table `openpos_item_bom`
 --
 
+CREATE TABLE IF NOT EXISTS `openpos_item_bom` (
+  `item_bom_id` int(10) NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) NOT NULL,
+  `bom_item_id` int(11) NOT NULL,
+  `quantity` double(15,3) NOT NULL,
+  PRIMARY KEY (`item_bom_id`,`item_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=300 ;
 
 -- --------------------------------------------------------
 
@@ -178,17 +218,12 @@ CREATE TABLE `openpos_items_taxes` (
 -- Table structure for table `openpos_item_kits`
 --
 
-CREATE TABLE `openpos_item_kits` (
+CREATE TABLE IF NOT EXISTS `openpos_item_kits` (
   `item_kit_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
   PRIMARY KEY (`item_kit_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `openpos_item_kits`
---
-
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
@@ -196,7 +231,7 @@ CREATE TABLE `openpos_item_kits` (
 -- Table structure for table `openpos_item_kit_items`
 --
 
-CREATE TABLE `openpos_item_kit_items` (
+CREATE TABLE IF NOT EXISTS `openpos_item_kit_items` (
   `item_kit_id` int(11) NOT NULL,
   `item_id` int(11) NOT NULL,
   `quantity` double(15,2) NOT NULL,
@@ -204,18 +239,13 @@ CREATE TABLE `openpos_item_kit_items` (
   KEY `openpos_item_kit_items_ibfk_2` (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `openpos_item_kit_items`
---
-
-
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `openpos_modules`
 --
 
-CREATE TABLE `openpos_modules` (
+CREATE TABLE IF NOT EXISTS `openpos_modules` (
   `name_lang_key` varchar(255) NOT NULL,
   `desc_lang_key` varchar(255) NOT NULL,
   `sort` int(10) NOT NULL,
@@ -244,10 +274,40 @@ INSERT INTO `openpos_modules` (`name_lang_key`, `desc_lang_key`, `sort`, `module
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `openpos_payment_methods`
+--
+
+CREATE TABLE IF NOT EXISTS `openpos_payment_methods` (
+  `payment_method_id` int(3) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  `active` int(1) NOT NULL DEFAULT '0',
+  `language_id` varchar(255) NOT NULL,
+  `allow_over_tender` int(1) NOT NULL DEFAULT '0',
+  `is_change` int(1) NOT NULL DEFAULT '0',
+  UNIQUE KEY `Name` (`payment_method_id`,`Name`),
+  KEY `payment_method_id` (`payment_method_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `openpos_payment_reason`
+--
+
+CREATE TABLE IF NOT EXISTS `openpos_payment_reason` (
+  `payment_reson_id` int(11) NOT NULL,
+  `reason` varchar(45) NOT NULL,
+  PRIMARY KEY (`payment_reson_id`),
+  UNIQUE KEY `payment_reson_id_UNIQUE` (`payment_reson_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `openpos_people`
 --
 
-CREATE TABLE `openpos_people` (
+CREATE TABLE IF NOT EXISTS `openpos_people` (
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
   `phone_number` varchar(255) NOT NULL,
@@ -261,7 +321,7 @@ CREATE TABLE `openpos_people` (
   `comments` text NOT NULL,
   `person_id` int(10) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`person_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `openpos_people`
@@ -276,7 +336,7 @@ INSERT INTO `openpos_people` (`first_name`, `last_name`, `phone_number`, `email`
 -- Table structure for table `openpos_permissions`
 --
 
-CREATE TABLE `openpos_permissions` (
+CREATE TABLE IF NOT EXISTS `openpos_permissions` (
   `module_id` varchar(255) NOT NULL,
   `person_id` int(10) NOT NULL,
   PRIMARY KEY (`module_id`,`person_id`),
@@ -305,7 +365,7 @@ INSERT INTO `openpos_permissions` (`module_id`, `person_id`) VALUES
 -- Table structure for table `openpos_receivings`
 --
 
-CREATE TABLE `openpos_receivings` (
+CREATE TABLE IF NOT EXISTS `openpos_receivings` (
   `receiving_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `supplier_id` int(10) DEFAULT NULL,
   `employee_id` int(10) NOT NULL DEFAULT '0',
@@ -315,7 +375,7 @@ CREATE TABLE `openpos_receivings` (
   PRIMARY KEY (`receiving_id`),
   KEY `supplier_id` (`supplier_id`),
   KEY `employee_id` (`employee_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `openpos_receivings`
@@ -328,7 +388,7 @@ CREATE TABLE `openpos_receivings` (
 -- Table structure for table `openpos_receivings_items`
 --
 
-CREATE TABLE `openpos_receivings_items` (
+CREATE TABLE IF NOT EXISTS `openpos_receivings_items` (
   `receiving_id` int(10) NOT NULL DEFAULT '0',
   `item_id` int(10) NOT NULL DEFAULT '0',
   `description` varchar(30) DEFAULT NULL,
@@ -353,17 +413,18 @@ CREATE TABLE `openpos_receivings_items` (
 -- Table structure for table `openpos_sales`
 --
 
-CREATE TABLE `openpos_sales` (
+CREATE TABLE IF NOT EXISTS `openpos_sales` (
   `sale_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `customer_id` int(10) DEFAULT NULL,
   `employee_id` int(10) NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
   `sale_id` int(10) NOT NULL AUTO_INCREMENT,
   `payment_type` varchar(512) DEFAULT NULL,
+  `cashup_id` int(10) NOT NULL,
   PRIMARY KEY (`sale_id`),
   KEY `customer_id` (`customer_id`),
   KEY `employee_id` (`employee_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=528 ;
 
 --
 -- Dumping data for table `openpos_sales`
@@ -376,7 +437,7 @@ CREATE TABLE `openpos_sales` (
 -- Table structure for table `openpos_sales_items`
 --
 
-CREATE TABLE `openpos_sales_items` (
+CREATE TABLE IF NOT EXISTS `openpos_sales_items` (
   `sale_id` int(10) NOT NULL DEFAULT '0',
   `item_id` int(10) NOT NULL DEFAULT '0',
   `description` varchar(30) DEFAULT NULL,
@@ -401,7 +462,7 @@ CREATE TABLE `openpos_sales_items` (
 -- Table structure for table `openpos_sales_items_taxes`
 --
 
-CREATE TABLE `openpos_sales_items_taxes` (
+CREATE TABLE IF NOT EXISTS `openpos_sales_items_taxes` (
   `sale_id` int(10) NOT NULL,
   `item_id` int(10) NOT NULL,
   `line` int(3) NOT NULL DEFAULT '0',
@@ -422,11 +483,14 @@ CREATE TABLE `openpos_sales_items_taxes` (
 -- Table structure for table `openpos_sales_payments`
 --
 
-CREATE TABLE `openpos_sales_payments` (
+CREATE TABLE IF NOT EXISTS `openpos_sales_payments` (
   `sale_id` int(10) NOT NULL,
   `payment_type` varchar(40) NOT NULL,
   `payment_amount` decimal(15,2) NOT NULL,
-  PRIMARY KEY (`sale_id`,`payment_type`)
+  `fk_reason` int(3) NOT NULL,
+  `cashup_id` int(11) NOT NULL,
+  PRIMARY KEY (`sale_id`,`payment_type`,`fk_reason`,`cashup_id`),
+  KEY `fk_openpos_sales_payments_1` (`fk_reason`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -440,7 +504,7 @@ CREATE TABLE `openpos_sales_payments` (
 -- Table structure for table `openpos_sales_suspended`
 --
 
-CREATE TABLE `openpos_sales_suspended` (
+CREATE TABLE IF NOT EXISTS `openpos_sales_suspended` (
   `sale_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `customer_id` int(10) DEFAULT NULL,
   `employee_id` int(10) NOT NULL DEFAULT '0',
@@ -463,7 +527,7 @@ CREATE TABLE `openpos_sales_suspended` (
 -- Table structure for table `openpos_sales_suspended_items`
 --
 
-CREATE TABLE `openpos_sales_suspended_items` (
+CREATE TABLE IF NOT EXISTS `openpos_sales_suspended_items` (
   `sale_id` int(10) NOT NULL DEFAULT '0',
   `item_id` int(10) NOT NULL DEFAULT '0',
   `description` varchar(30) DEFAULT NULL,
@@ -488,7 +552,7 @@ CREATE TABLE `openpos_sales_suspended_items` (
 -- Table structure for table `openpos_sales_suspended_items_taxes`
 --
 
-CREATE TABLE `openpos_sales_suspended_items_taxes` (
+CREATE TABLE IF NOT EXISTS `openpos_sales_suspended_items_taxes` (
   `sale_id` int(10) NOT NULL,
   `item_id` int(10) NOT NULL,
   `line` int(3) NOT NULL DEFAULT '0',
@@ -509,11 +573,12 @@ CREATE TABLE `openpos_sales_suspended_items_taxes` (
 -- Table structure for table `openpos_sales_suspended_payments`
 --
 
-CREATE TABLE `openpos_sales_suspended_payments` (
+CREATE TABLE IF NOT EXISTS `openpos_sales_suspended_payments` (
   `sale_id` int(10) NOT NULL,
   `payment_type` varchar(40) NOT NULL,
   `payment_amount` decimal(15,2) NOT NULL,
-  PRIMARY KEY (`sale_id`,`payment_type`)
+  `fk_reason` int(11) NOT NULL,
+  PRIMARY KEY (`sale_id`,`payment_type`,`fk_reason`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -527,7 +592,7 @@ CREATE TABLE `openpos_sales_suspended_payments` (
 -- Table structure for table `openpos_sessions`
 --
 
-CREATE TABLE `openpos_sessions` (
+CREATE TABLE IF NOT EXISTS `openpos_sessions` (
   `session_id` varchar(40) NOT NULL DEFAULT '0',
   `ip_address` varchar(16) NOT NULL DEFAULT '0',
   `user_agent` varchar(50) NOT NULL,
@@ -547,7 +612,7 @@ CREATE TABLE `openpos_sessions` (
 -- Table structure for table `openpos_suppliers`
 --
 
-CREATE TABLE `openpos_suppliers` (
+CREATE TABLE IF NOT EXISTS `openpos_suppliers` (
   `person_id` int(10) NOT NULL,
   `company_name` varchar(255) NOT NULL,
   `account_number` varchar(255) DEFAULT NULL,
@@ -556,10 +621,25 @@ CREATE TABLE `openpos_suppliers` (
   KEY `person_id` (`person_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `openpos_suppliers`
---
+-- --------------------------------------------------------
 
+--
+-- Stand-in structure for view `view_item_bom_cost`
+--
+CREATE TABLE IF NOT EXISTS `view_item_bom_cost` (
+   `item_id` int(11)
+  ,`bom_line_cost` double(20,3)
+  ,`item_cost_price` double(15,2)
+  ,`cost_from_bom` tinyint(1)
+);
+-- --------------------------------------------------------
+
+--
+-- Structure for view `view_item_bom_cost`
+--
+DROP TABLE IF EXISTS `view_item_bom_cost`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`openpos`@`localhost` SQL SECURITY DEFINER VIEW `view_item_bom_cost` AS select `ib`.`item_id` AS `item_id`,sum((`bi`.`cost_price` * `ib`.`quantity`)) AS `bom_line_cost`,`i`.`cost_price` AS `item_cost_price`,`i`.`cost_from_bom` AS `cost_from_bom` from ((`openpos_item_bom` `ib` left join `openpos_items` `i` on((`ib`.`item_id` = `i`.`item_id`))) left join `openpos_items` `bi` on((`ib`.`bom_item_id` = `bi`.`item_id`))) group by `ib`.`item_id`;
 
 --
 -- Constraints for dumped tables
@@ -569,117 +649,122 @@ CREATE TABLE `openpos_suppliers` (
 -- Constraints for table `openpos_customers`
 --
 ALTER TABLE `openpos_customers`
-  ADD CONSTRAINT `openpos_customers_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `openpos_people` (`person_id`);
+ADD CONSTRAINT `openpos_customers_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `openpos_people` (`person_id`);
 
 --
 -- Constraints for table `openpos_employees`
 --
 ALTER TABLE `openpos_employees`
-  ADD CONSTRAINT `openpos_employees_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `openpos_people` (`person_id`);
+ADD CONSTRAINT `openpos_employees_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `openpos_people` (`person_id`);
 
 --
 -- Constraints for table `openpos_inventory`
 --
 ALTER TABLE `openpos_inventory`
-  ADD CONSTRAINT `openpos_inventory_ibfk_1` FOREIGN KEY (`trans_items`) REFERENCES `openpos_items` (`item_id`),
-  ADD CONSTRAINT `openpos_inventory_ibfk_2` FOREIGN KEY (`trans_user`) REFERENCES `openpos_employees` (`person_id`);
+ADD CONSTRAINT `openpos_inventory_ibfk_1` FOREIGN KEY (`trans_items`) REFERENCES `openpos_items` (`item_id`),
+ADD CONSTRAINT `openpos_inventory_ibfk_2` FOREIGN KEY (`trans_user`) REFERENCES `openpos_employees` (`person_id`);
 
 --
 -- Constraints for table `openpos_items`
 --
 ALTER TABLE `openpos_items`
-  ADD CONSTRAINT `openpos_items_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `openpos_suppliers` (`person_id`);
+ADD CONSTRAINT `openpos_items_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `openpos_suppliers` (`person_id`);
 
 --
 -- Constraints for table `openpos_items_taxes`
 --
 ALTER TABLE `openpos_items_taxes`
-  ADD CONSTRAINT `openpos_items_taxes_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`) ON DELETE CASCADE;
+ADD CONSTRAINT `openpos_items_taxes_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `openpos_item_kit_items`
 --
 ALTER TABLE `openpos_item_kit_items`
-  ADD CONSTRAINT `openpos_item_kit_items_ibfk_1` FOREIGN KEY (`item_kit_id`) REFERENCES `openpos_item_kits` (`item_kit_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `openpos_item_kit_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`)  ON DELETE CASCADE;
+ADD CONSTRAINT `openpos_item_kit_items_ibfk_1` FOREIGN KEY (`item_kit_id`) REFERENCES `openpos_item_kits` (`item_kit_id`) ON DELETE CASCADE,
+ADD CONSTRAINT `openpos_item_kit_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `openpos_permissions`
 --
 ALTER TABLE `openpos_permissions`
-  ADD CONSTRAINT `openpos_permissions_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `openpos_employees` (`person_id`),
-  ADD CONSTRAINT `openpos_permissions_ibfk_2` FOREIGN KEY (`module_id`) REFERENCES `openpos_modules` (`module_id`);
+ADD CONSTRAINT `openpos_permissions_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `openpos_employees` (`person_id`),
+ADD CONSTRAINT `openpos_permissions_ibfk_2` FOREIGN KEY (`module_id`) REFERENCES `openpos_modules` (`module_id`);
 
 --
 -- Constraints for table `openpos_receivings`
 --
 ALTER TABLE `openpos_receivings`
-  ADD CONSTRAINT `openpos_receivings_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `openpos_employees` (`person_id`),
-  ADD CONSTRAINT `openpos_receivings_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `openpos_suppliers` (`person_id`);
+ADD CONSTRAINT `openpos_receivings_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `openpos_employees` (`person_id`),
+ADD CONSTRAINT `openpos_receivings_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `openpos_suppliers` (`person_id`);
 
 --
 -- Constraints for table `openpos_receivings_items`
 --
 ALTER TABLE `openpos_receivings_items`
-  ADD CONSTRAINT `openpos_receivings_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`),
-  ADD CONSTRAINT `openpos_receivings_items_ibfk_2` FOREIGN KEY (`receiving_id`) REFERENCES `openpos_receivings` (`receiving_id`);
+ADD CONSTRAINT `openpos_receivings_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`),
+ADD CONSTRAINT `openpos_receivings_items_ibfk_2` FOREIGN KEY (`receiving_id`) REFERENCES `openpos_receivings` (`receiving_id`);
 
 --
 -- Constraints for table `openpos_sales`
 --
 ALTER TABLE `openpos_sales`
-  ADD CONSTRAINT `openpos_sales_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `openpos_employees` (`person_id`),
-  ADD CONSTRAINT `openpos_sales_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `openpos_customers` (`person_id`);
+ADD CONSTRAINT `openpos_sales_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `openpos_employees` (`person_id`),
+ADD CONSTRAINT `openpos_sales_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `openpos_customers` (`person_id`);
 
 --
 -- Constraints for table `openpos_sales_items`
 --
 ALTER TABLE `openpos_sales_items`
-  ADD CONSTRAINT `openpos_sales_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`),
-  ADD CONSTRAINT `openpos_sales_items_ibfk_2` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales` (`sale_id`);
+ADD CONSTRAINT `openpos_sales_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`),
+ADD CONSTRAINT `openpos_sales_items_ibfk_2` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales` (`sale_id`);
 
 --
 -- Constraints for table `openpos_sales_items_taxes`
 --
 ALTER TABLE `openpos_sales_items_taxes`
-  ADD CONSTRAINT `openpos_sales_items_taxes_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales_items` (`sale_id`),
-  ADD CONSTRAINT `openpos_sales_items_taxes_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`);
+ADD CONSTRAINT `openpos_sales_items_taxes_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales_items` (`sale_id`),
+ADD CONSTRAINT `openpos_sales_items_taxes_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`);
 
 --
 -- Constraints for table `openpos_sales_payments`
 --
 ALTER TABLE `openpos_sales_payments`
-  ADD CONSTRAINT `openpos_sales_payments_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales` (`sale_id`);
+ADD CONSTRAINT `fk_openpos_sales_payments_1` FOREIGN KEY (`fk_reason`) REFERENCES `openpos_payment_reason` (`payment_reson_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `openpos_sales_payments_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales` (`sale_id`);
 
 --
 -- Constraints for table `openpos_sales_suspended`
 --
 ALTER TABLE `openpos_sales_suspended`
-  ADD CONSTRAINT `openpos_sales_suspended_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `openpos_employees` (`person_id`),
-  ADD CONSTRAINT `openpos_sales_suspended_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `openpos_customers` (`person_id`);
+ADD CONSTRAINT `openpos_sales_suspended_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `openpos_employees` (`person_id`),
+ADD CONSTRAINT `openpos_sales_suspended_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `openpos_customers` (`person_id`);
 
 --
 -- Constraints for table `openpos_sales_suspended_items`
 --
 ALTER TABLE `openpos_sales_suspended_items`
-  ADD CONSTRAINT `openpos_sales_suspended_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`),
-  ADD CONSTRAINT `openpos_sales_suspended_items_ibfk_2` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales_suspended` (`sale_id`);
+ADD CONSTRAINT `openpos_sales_suspended_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`),
+ADD CONSTRAINT `openpos_sales_suspended_items_ibfk_2` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales_suspended` (`sale_id`);
 
 --
 -- Constraints for table `openpos_sales_suspended_items_taxes`
 --
 ALTER TABLE `openpos_sales_suspended_items_taxes`
-  ADD CONSTRAINT `openpos_sales_suspended_items_taxes_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales_suspended_items` (`sale_id`),
-  ADD CONSTRAINT `openpos_sales_suspended_items_taxes_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`);
+ADD CONSTRAINT `openpos_sales_suspended_items_taxes_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales_suspended_items` (`sale_id`),
+ADD CONSTRAINT `openpos_sales_suspended_items_taxes_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `openpos_items` (`item_id`);
 
 --
 -- Constraints for table `openpos_sales_suspended_payments`
 --
 ALTER TABLE `openpos_sales_suspended_payments`
-  ADD CONSTRAINT `openpos_sales_suspended_payments_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales_suspended` (`sale_id`);
+ADD CONSTRAINT `openpos_sales_suspended_payments_ibfk_1` FOREIGN KEY (`sale_id`) REFERENCES `openpos_sales_suspended` (`sale_id`);
 
 --
 -- Constraints for table `openpos_suppliers`
 --
 ALTER TABLE `openpos_suppliers`
-  ADD CONSTRAINT `openpos_suppliers_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `openpos_people` (`person_id`);
+ADD CONSTRAINT `openpos_suppliers_ibfk_1` FOREIGN KEY (`person_id`) REFERENCES `openpos_people` (`person_id`);
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

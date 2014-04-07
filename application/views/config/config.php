@@ -220,6 +220,30 @@ echo form_open('config/save/', array('id' => 'config_form'));
             'value' => 'print_after_sale',
             'checked' => $this->config->item('print_after_sale')));?>
     </div>
+    <?php echo form_label($this->lang->line('config_page_width') . ':', 'page_size', array('class' => 'right')); ?>
+    <div class='form_field'>
+
+        <?php echo form_radio(
+            array(
+                'name' => 'page_width',
+                'id' => 'page_width'),
+            'a4',
+            ($this->config->item('page_width') == 'a4' ? TRUE : FALSE) ,
+            ''
+        );
+        echo $this->lang->line('config_page_width_a4') ?>
+    <br>
+        <?php echo form_radio(
+            array(
+                'name' => 'page_width',
+                'id' => 'page_width'),
+            'receipt',
+            ($this->config->item('page_width') == 'receipt' ? TRUE : FALSE) ,
+            ''
+        );
+        echo $this->lang->line('config_page_width_receipt')?>
+
+    </div>
 </div>
 
 

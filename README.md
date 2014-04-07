@@ -5,7 +5,7 @@ This project aims to create a modern look and integrate features from other comm
 
 
 MySQL User Creation
--------------------------
+---------------------track----
 CREATE USER 'openpos'@'localhost' IDENTIFIED BY  'openpos';
 GRANT USAGE ON * . * TO  'openpos'@'localhost' IDENTIFIED BY  'openpos' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0 ;
 CREATE DATABASE IF NOT EXISTS  `openpos` ;
@@ -37,4 +37,4 @@ Changes:
 - Bill of materials:
    * Cost from BOM (Bill of materials) or manually maintained
    * Updates stock level according to BOM setup for an item
-- Miminalised invoice for slip printing
+- Simplified invoice for slip printing

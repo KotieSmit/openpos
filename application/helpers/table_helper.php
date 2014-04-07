@@ -208,9 +208,9 @@ function get_item_data_row($item,$controller)
 	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$item->item_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';
 
 	//Ramel Inventory Tracking
-	$table_data_row.='<td width="10%">'.anchor($controller_name."/inventory/$item->item_id/width:$width", $CI->lang->line('common_inv'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_count')))./*'</td>';//inventory count
-	$table_data_row.='<td width="5%">'*/'&nbsp;&nbsp;&nbsp;&nbsp;'.anchor($controller_name."/count_details/$item->item_id/width:$width", $CI->lang->line('common_det'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_details_count'))).'</td>';//inventory details
-
+	$table_data_row.='<td width="5%">'.anchor($controller_name."/inventory/$item->item_id/width:$width", $CI->lang->line('common_inv'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_count'))).'</td>';//inventory count
+    $table_data_row.='<td width="5%"> '.anchor($controller_name."/bill_of_materials/$item->item_id/width:$width", $CI->lang->line('common_bom'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_bom'))).'</td>'; //Bill of Materials
+	$table_data_row.='<td width="5%"> '.anchor($controller_name."/count_details/$item->item_id/width:$width", $CI->lang->line('common_det'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_details_count'))).'</td>';//inventory details
 	$table_data_row.='</tr>';
 	return $table_data_row;
 }
@@ -329,6 +329,7 @@ function get_item_kits_manage_table( $item_kits, $controller )
 	$table='<table class="tablesorter" id="sortable_table">';
 
 	$headers = array('<input type="checkbox" id="select_all" />',
+    $CI->lang->line('item_kits_id'),
 	$CI->lang->line('item_kits_name'),
 	$CI->lang->line('item_kits_description'),
 	'&nbsp',
@@ -374,7 +375,8 @@ function get_item_kit_data_row($item_kit,$controller)
 
 	$table_data_row='<tr>';
 	$table_data_row.="<td width='3%'><input type='checkbox' id='item_kit_$item_kit->item_kit_id' value='".$item_kit->item_kit_id."'/></td>";
-	$table_data_row.='<td width="15%">'.$item_kit->name.'</td>';
+	$table_data_row.='<td width="15%">KIT '.$item_kit->item_kit_id.'</td>';
+    $table_data_row.='<td width="15%">'.$item_kit->name.'</td>';
 	$table_data_row.='<td width="20%">'.character_limiter($item_kit->description, 25).'</td>';
 	$table_data_row.='<td width="5%">'.anchor($controller_name."/view/$item_kit->item_kit_id/width:$width", $CI->lang->line('common_edit'),array('class'=>'thickbox','title'=>$CI->lang->line($controller_name.'_update'))).'</td>';
 

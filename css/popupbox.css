@@ -99,3 +99,23 @@
 {
 	text-align: center;
 }
+
+#bom_items_title
+{
+	text-align: center;
+}
+#bom_items
+{
+	width: 100%;
+}
+
+#bom_items th
+{
+	text-align: center;
+	font-weight: bold;
+}
+
+#bom_items td
+{
+	text-align: center;
+}

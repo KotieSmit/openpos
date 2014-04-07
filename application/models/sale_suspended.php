@@ -65,6 +65,7 @@ class Sale_suspended extends Model
 			(
 				'sale_id'=>$sale_id,
 				'payment_type'=>$payment['payment_type'],
+                'fk_reason'=>$payment['fk_reason'],
 				'payment_amount'=>$payment['payment_amount']
 			);
 			$this->db->insert('sales_suspended_payments',$sales_payments_data);

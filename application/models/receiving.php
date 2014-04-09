@@ -57,6 +57,21 @@ class Receiving extends Model
 
 			//Update stock quantity
 			$item_data = array('quantity'=>$cur_item_info->quantity + $item['quantity']);
+            if ($cur_item_info->cost_from_receiving) {
+                if ($cur_item_info->cost_last) {
+                    $item_data['cost_price'] = $item['price'];
+                }
+                if ($cur_item_info->cost_ave) {
+                    if ($cur_item_info->quantity > 0) {
+                        $item_data['cost_price'] = (
+                                ($cur_item_info->quantity * $cur_item_info->cost_price) +
+                                ($item['quantity'] * $item['price'])) /
+                            ($item['discount'] + $cur_item_info->quantity);
+                    } else {
+                        $item_data['cost_price'] = $item['price'];
+                    }
+                }
+            }
 			$this->Item->save($item_data,$item['item_id']);
 			
 			$qty_recv = $item['quantity'];
@@ -73,6 +88,7 @@ class Receiving extends Model
 
 			$supplier = $this->Supplier->get_info($supplier_id);
 		}
+
         $this->Item->update_all_bom_cost();
 		$this->db->trans_complete();
 		

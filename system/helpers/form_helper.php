@@ -351,7 +351,7 @@ if ( ! function_exists('form_dropdown'))
  */
 if ( ! function_exists('form_checkbox'))
 {
-	function form_checkbox($data = '', $value = '', $checked = FALSE, $extra = '')
+	function form_checkbox($data = '', $value = '', $checked = FALSE, $extra = '', $text = '')
 	{
 		$defaults = array('type' => 'checkbox', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
 
@@ -378,7 +378,7 @@ if ( ! function_exists('form_checkbox'))
 			unset($defaults['checked']);
 		}
 
-		return "<input "._parse_form_attributes($data, $defaults).$extra." />";
+		return "<input "._parse_form_attributes($data, $defaults).$extra." >$text</input>";
 	}
 }
 
@@ -396,7 +396,7 @@ if ( ! function_exists('form_checkbox'))
  */
 if ( ! function_exists('form_radio'))
 {
-	function form_radio($data = '', $value = '', $checked = FALSE, $extra = '')
+	function form_radio($data = '', $value = '', $checked = FALSE, $extra = '', $text='')
 	{
 		if ( ! is_array($data))
 		{	
@@ -404,7 +404,7 @@ if ( ! function_exists('form_radio'))
 		}
 
 		$data['type'] = 'radio';
-		return form_checkbox($data, $value, $checked, $extra);
+		return form_checkbox($data, $value, $checked, $extra, $text);
 	}
 }
 

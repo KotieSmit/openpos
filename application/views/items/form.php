@@ -159,66 +159,131 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
 	);?>
 	</div>
 </div>
+<table style="width: 100%">
+    <tr>
+        <td>
+            <div class="field_row clearfix">
+                <?php echo form_label($this->lang->line('items_allow_alt_desciption').':', 'allow_alt_description',array('class'=>'wide')); ?>
+                <div class='form_field'>
+                    <?php echo form_checkbox(array(
+                            'name'=>'allow_alt_description',
+                            'id'=>'allow_alt_description',
+                            'value'=>1,
+                            'checked'=>($item_info->allow_alt_description)? 1  :0)
+                    );?>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="field_row clearfix">
+                <?php echo form_label($this->lang->line('items_stock_keeping_item').':', 'stock_keeping_item',array('class'=>'wide')); ?>
+                <div class='form_field'>
+                    <?php echo form_checkbox(array(
+                            'name'=>'stock_keeping_item',
+                            'id'=>'stock_keeping_item',
+                            'value'=>1,
+                            'checked'=>($item_info->stock_keeping_item)? 1 : 0)
+                    );?>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="field_row clearfix">
+                <?php echo form_label($this->lang->line('items_cost_from_bom').':', 'cost_from_bom',array('class'=>'wide')); ?>
+                <div class='form_field'>
+                    <?php echo form_checkbox(array(
+                            'name'=>'cost_from_bom',
+                            'id'=>'cost_from_bom',
+                            'value'=>1,
+                            'checked'=>($item_info->cost_from_bom)? 1 : 0)
+                    );?>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="field_row clearfix">
+                <?php echo form_label($this->lang->line('items_is_serialized').':', 'is_serialized',array('class'=>'wide')); ?>
+                <div class='form_field'>
+                    <?php echo form_checkbox(array(
+                            'name'=>'is_serialized',
+                            'id'=>'is_serialized',
+                            'value'=>1,
+                            'checked'=>($item_info->is_serialized)? 1 : 0)
+                    );?>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="field_row clearfix">
+                <?php echo form_label($this->lang->line('items_production_item').':', 'production_item',array('class'=>'wide')); ?>
+                <div class='form_field'>
+                    <?php echo form_checkbox(array(
+                            'name'=>'production_item',
+                            'id'=>'production_item',
+                            'value'=>1,
+                            'checked'=>($item_info->production_item)? 1 : 0)
+                    );?>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="field_row clearfix">
+                <?php echo form_label($this->lang->line('items_cost_from_receiving').':', 'cost_from_receiving',array('class'=>'wide')); ?>
+                <div class='form_field'>
+                    <?php echo form_checkbox(array(
+                            'name'=>'cost_from_receiving',
+                            'id'=>'cost_from_receiving',
+                            'value'=>1,
+                            'checked'=>($item_info->cost_from_receiving)? 1 : 0)
 
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_allow_alt_desciption').':', 'allow_alt_description',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_checkbox(array(
-		'name'=>'allow_alt_description',
-		'id'=>'allow_alt_description',
-		'value'=>1,
-		'checked'=>($item_info->allow_alt_description)? 1  :0)
-	);?>
-	</div>
-</div>
+                    );?>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
 
-<div class="field_row clearfix">
-<?php echo form_label($this->lang->line('items_is_serialized').':', 'is_serialized',array('class'=>'wide')); ?>
-	<div class='form_field'>
-	<?php echo form_checkbox(array(
-		'name'=>'is_serialized',
-		'id'=>'is_serialized',
-		'value'=>1,
-		'checked'=>($item_info->is_serialized)? 1 : 0)
-	);?>
-	</div>
-</div>
 
-<div class="field_row clearfix">
-    <?php echo form_label($this->lang->line('items_stock_keeping_item').':', 'is_serialized',array('class'=>'wide')); ?>
-    <div class='form_field'>
-        <?php echo form_checkbox(array(
-                'name'=>'stock_keeping_item',
-                'id'=>'stock_keeping_item',
-                'value'=>1,
-                'checked'=>($item_info->stock_keeping_item)? 1 : 0)
-        );?>
-    </div>
-</div>
 
-<div class="field_row clearfix">
-    <?php echo form_label($this->lang->line('items_cost_from_bom').':', 'is_serialized',array('class'=>'wide')); ?>
-    <div class='form_field'>
-        <?php echo form_checkbox(array(
-                'name'=>'cost_from_bom',
-                'id'=>'cost_from_bom',
-                'value'=>1,
-                'checked'=>($item_info->cost_from_bom)? 1 : 0)
-        );?>
-    </div>
-</div>
+<table>
+    <tr>
+        <td>
+            <?php echo form_label($this->lang->line('items_cost_cal_method').':', '',array('class'=>'wide')); ?>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class='form_field'><br>
+                <?php echo form_radio(array(
+                        'name'=>'cost',
+                        'id'=>'cost_last'),
+                    'cost_ave',
+                    (($item_info->cost_ave)? true : false),
+                    '',
+                    $this->lang->line('items_cost_last')
+                );?>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class='form_field'><br>
+                <?php echo form_radio(array(
+                        'name'=>'cost',
+                        'id'=>'cost_ave'),
+                    'cost_ave',
+                    (($item_info->cost_ave)? true : false),
+                    '',
+                    $this->lang->line('items_cost_ave')
+                );?>
+            </div>
+        </td>
+    </tr>
 
-<div class="field_row clearfix">
-    <?php echo form_label($this->lang->line('items_production_item').':', 'is_serialized',array('class'=>'wide')); ?>
-    <div class='form_field'>
-        <?php echo form_checkbox(array(
-                'name'=>'production_item',
-                'id'=>'production_item',
-                'value'=>1,
-                'checked'=>($item_info->production_item)? 1 : 0)
-        );?>
-    </div>
-</div>
+</table>
+
 
 <?php
 echo form_submit(array(

@@ -171,7 +171,10 @@ class Items extends Secure_area implements iData_controller
 		'is_serialized'=>$this->input->post('is_serialized'),
         'stock_keeping_item'=>$this->input->post('stock_keeping_item'),
         'cost_from_bom'=>$this->input->post('cost_from_bom'),
-        'production_item'=>$this->input->post('production_item')
+        'cost_from_receiving'=>$this->input->post('cost_from_receiving'),
+        'production_item'=>$this->input->post('production_item'),
+        'cost_ave'=>(($this->input->post('cost') == 'cost_ave') ? 1 : 0),
+        'cost_last'=>(($this->input->post('cost') == 'cost_last') ? 1 : 0)
 		);
 
 		$employee_id=$this->Employee->get_logged_in_employee_info()->person_id;
@@ -459,7 +462,7 @@ class Items extends Secure_area implements iData_controller
 	*/
 	function get_form_width()
 	{
-		return 650;
+		return 750;
 	}
 
 }

@@ -80,8 +80,13 @@ $lang['items_bom']='Bill of materials';
 $lang['items_add_item']='Add Item';
 $lang['items_stock_keeping_item']='Stock keeping item';
 $lang['items_cost_from_bom']='Cost from BOM';
+$lang['items_cost_from_receiving']='Cost updated from Receiving';
 $lang['items_production_item']='Production item';
 $lang['items_Item']='Item';
 $lang['items_cost']='Cost';
 $lang['items_bom_cost']='Material cost';
+$lang['items_cost_cal_method']='Cost method';
+$lang['items_cost_last']='Last cost';
+$lang['items_cost_ave']='Average cost';
+
 ?>

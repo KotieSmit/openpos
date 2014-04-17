@@ -3,3 +3,17 @@
 * Fixed a bug where comment would disappear after typing it and then doing something different in a sale.
 * Fixed bug where Low Inventory items wouldn't display correct items
 * Fixed bug where an item couldn't be imported with a location
+
+2014-04-16
+----------
+ft - Added 2 costing methods:  Last cost and Ave cost
+        Last cost: Updates the item's cost price with the last purchase cost of an item.
+        Ave cost: Takes current value of items in stock, adds total value of items bought, and calculates a new average cost
+                eg. 10 in stock @ 2.00 each.  Stock value = 20.00.
+                   Buy new stock in 5 @ 3.00 = 15.00
+                   New total value = 35
+                   New cost = 35 / 15 = 2.333...
+
+Bug - Fixed column heading of items
+
+Bug - Fixed issue of non-stock item was giving a warning of low stock levels.  Only  Stock Keeping Items will report a warning from now on

@@ -148,7 +148,9 @@ function get_items_manage_table($items,$controller)
 	$CI->lang->line('items_tax_percents'),
 	$CI->lang->line('items_quantity'),
 	'&nbsp;',
-	$CI->lang->line('items_inventory')
+    '&nbsp;',
+    '&nbsp;',
+    '&nbsp;',
 	);
 
 	$table.='<thead><tr>';

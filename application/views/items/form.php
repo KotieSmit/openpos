@@ -164,7 +164,7 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
         <td>
             <div class="field_row clearfix">
                 <?php echo form_label($this->lang->line('items_allow_alt_desciption').':', 'allow_alt_description',array('class'=>'wide')); ?>
-                <div class='form_field'>
+                <div class='form_field_white'>
                     <?php echo form_checkbox(array(
                             'name'=>'allow_alt_description',
                             'id'=>'allow_alt_description',
@@ -177,7 +177,7 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
         <td>
             <div class="field_row clearfix">
                 <?php echo form_label($this->lang->line('items_stock_keeping_item').':', 'stock_keeping_item',array('class'=>'wide')); ?>
-                <div class='form_field'>
+                <div class='form_field_white'>
                     <?php echo form_checkbox(array(
                             'name'=>'stock_keeping_item',
                             'id'=>'stock_keeping_item',
@@ -190,7 +190,7 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
         <td>
             <div class="field_row clearfix">
                 <?php echo form_label($this->lang->line('items_cost_from_bom').':', 'cost_from_bom',array('class'=>'wide')); ?>
-                <div class='form_field'>
+                <div class='form_field_white'>
                     <?php echo form_checkbox(array(
                             'name'=>'cost_from_bom',
                             'id'=>'cost_from_bom',
@@ -205,7 +205,7 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
         <td>
             <div class="field_row clearfix">
                 <?php echo form_label($this->lang->line('items_is_serialized').':', 'is_serialized',array('class'=>'wide')); ?>
-                <div class='form_field'>
+                <div class='form_field_white'>
                     <?php echo form_checkbox(array(
                             'name'=>'is_serialized',
                             'id'=>'is_serialized',
@@ -218,7 +218,7 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
         <td>
             <div class="field_row clearfix">
                 <?php echo form_label($this->lang->line('items_production_item').':', 'production_item',array('class'=>'wide')); ?>
-                <div class='form_field'>
+                <div class='form_field_white'>
                     <?php echo form_checkbox(array(
                             'name'=>'production_item',
                             'id'=>'production_item',
@@ -231,13 +231,12 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
         <td>
             <div class="field_row clearfix">
                 <?php echo form_label($this->lang->line('items_cost_from_receiving').':', 'cost_from_receiving',array('class'=>'wide')); ?>
-                <div class='form_field'>
+                <div class='form_field_white'>
                     <?php echo form_checkbox(array(
                             'name'=>'cost_from_receiving',
                             'id'=>'cost_from_receiving',
                             'value'=>1,
                             'checked'=>($item_info->cost_from_receiving)? 1 : 0)
-
                     );?>
                 </div>
             </div>
@@ -255,12 +254,14 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
     </tr>
     <tr>
         <td>
-            <div class='form_field'><br>
+            <div class='form_field_white'>
                 <?php echo form_radio(array(
                         'name'=>'cost',
-                        'id'=>'cost_last'),
-                    'cost_ave',
-                    (($item_info->cost_ave)? true : false),
+                        'id'=>'cost_last',
+                        'style'=>"background : #FFCC00; color : black"
+                        ),
+                    'cost_last',
+                    (($item_info->cost_last)? true : false),
                     '',
                     $this->lang->line('items_cost_last')
                 );?>
@@ -269,7 +270,7 @@ echo form_open('items/save/'.$item_info->item_id,array('id'=>'item_form'));
     </tr>
     <tr>
         <td>
-            <div class='form_field'><br>
+            <div class='form_field_white'>
                 <?php echo form_radio(array(
                         'name'=>'cost',
                         'id'=>'cost_ave'),

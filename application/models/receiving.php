@@ -66,7 +66,7 @@ class Receiving extends Model
                         $item_data['cost_price'] = (
                                 ($cur_item_info->quantity * $cur_item_info->cost_price) +
                                 ($item['quantity'] * $item['price'])) /
-                            ($item['discount'] + $cur_item_info->quantity);
+                            ($item['quantity'] + $cur_item_info->quantity);
                     } else {
                         $item_data['cost_price'] = $item['price'];
                     }

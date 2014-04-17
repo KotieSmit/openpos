@@ -150,10 +150,13 @@ class Sales extends Secure_area
 			$data['error']=$this->lang->line('sales_unable_to_add_item');
 		}
 
-		if($this->sale_lib->out_of_stock($item_id_or_number_or_item_kit_or_receipt))
-		{
-			$data['warning'] = $this->lang->line('sales_quantity_less_than_zero');
-		}
+        $item = $this->Item->get_info($item_id_or_number_or_item_kit_or_receipt);
+        if($item->stock_keeping_item == true) {
+            if($this->sale_lib->out_of_stock($item_id_or_number_or_item_kit_or_receipt))
+            {
+                $data['warning'] = $this->lang->line('sales_quantity_less_than_zero');
+            }
+        }
 		$this->_reload($data);
 	}
 

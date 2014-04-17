@@ -27,6 +27,13 @@ label.required
  	padding: 3px;
  	background-color: #f2f2f2;
 }
+
+.form_field_white
+{
+    float:left;
+    padding: 3px;
+    background-color: white;
+}
   
 .form_field input, .form_field textarea 
 {

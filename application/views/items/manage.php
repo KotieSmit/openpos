@@ -51,7 +51,9 @@ function init_table_sorting()
 			{
 				0: { sorter: false},
 				8: { sorter: false},
-				9: { sorter: false}
+				9: { sorter: false},
+                10: { sorter: false},
+                11: { sorter: false}
 			}
 
 		});
